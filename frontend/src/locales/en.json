@@ -1,0 +1,128 @@
+{
+  "app": {
+    "title": "Holy Bible",
+    "subtitle": "Read, Search, and Meditate on God's Word"
+  },
+  "nav": {
+    "read": "Read",
+    "search": "Search",
+    "bookmarks": "Bookmarks",
+    "login": "Login",
+    "logout": "Logout",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language",
+    "loginToAccess": "Login to access Bookmarks"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back!",
+    "startJourney": "Start your journey",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "username": "Username",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "signInButton": "Sign In",
+    "signUpButton": "Get Started",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "continueAsGuest": "Continue as Guest →",
+    "agreeTerms": "By creating an account, you agree to the Terms and Conditions and Privacy Policy",
+    "heroTitle": "Walk with Christ through His Word",
+    "heroSubtitle": "Experience the Bible like never before. Read, search, and meditate on God's Word with our modern platform.",
+    "quote": "I am the way, the truth, and the life",
+    "quoteReference": "John 14:6",
+    "stats": {
+      "books": "Books",
+      "chapters": "Chapters",
+      "verses": "Verses"
+    },
+    "validation": {
+      "nameLength": "Name must be at least 2 characters",
+      "passwordMatch": "Passwords do not match",
+      "passwordLength": "Password must be at least 8 characters",
+      "passwordUppercase": "Password must contain at least 1 uppercase letter",
+      "passwordLowercase": "Password must contain at least 1 lowercase letter",
+      "passwordNumber": "Password must contain at least 1 number",
+      "agreeTermsRequired": "You must agree to the terms and conditions"
+    },
+    "passwordRequirements": {
+      "title": "Password must contain:",
+      "length": "At least 8 characters",
+      "uppercase": "1 uppercase letter (A-Z)",
+      "lowercase": "1 lowercase letter (a-z)",
+      "number": "1 number (0-9)"
+    },
+    "success": {
+      "login": "Login successful! Redirecting...",
+      "register": "Registration successful! Please login."
+    },
+    "error": {
+      "loginFailed": "Login failed",
+      "genericError": "An error occurred. Please try again."
+    }
+  },
+  "reader": {
+    "loading": "Loading Bible chapter...",
+    "previous": "Previous",
+    "next": "Next",
+    "chapter": "Chapter",
+    "testament": "Testament",
+    "verse": "Verse",
+    "scrollToTop": "Scroll to top",
+    "translationNotice": "ℹ️ Displaying King James Version (KJV)"
+  },
+  "search": {
+    "title": "Search the Bible",
+    "subtitle": "Explore 31,102 verses from Genesis to Revelation",
+    "placeholder": "Search verses, keywords, or references (e.g., John 3:16)...",
+    "searchButton": "Search",
+    "searching": "Searching...",
+    "resultsFound": "Result",
+    "resultsFoundPlural": "Results Found",
+    "showingMatches": "Showing matches for",
+    "readChapter": "Read Chapter →",
+    "noResults": "No Results Found",
+    "noResultsMessage": "We couldn't find any verses matching",
+    "searchTips": {
+      "title": "Search Tips:",
+      "verseRef": "Verse References: Try \"John 3:16\", \"Genesis 1:1\", or \"Psalm 23\"",
+      "bookChapter": "Book & Chapter: Search \"Matthew 5\" or \"Romans 8\"",
+      "popular": "Popular Verses: Click quick search buttons below"
+    },
+    "trySearch": "Try",
+    "popularSearches": "Popular Searches",
+    "popularSubtitle": "Quick access to famous verses",
+    "bibleCoverage": "Bible Coverage",
+    "coverageSubtitle": "Complete access to Scripture",
+    "books": "Books",
+    "chapters": "Chapters",
+    "verses": "Verses",
+    "popularVerses": {
+      "john316": "For God so loved the world",
+      "psalm23": "The Lord is my shepherd",
+      "romans828": "All things work together"
+    }
+  },
+  "bookmarks": {
+    "title": "My Bookmarks",
+    "subtitle": "Your saved verses and passages",
+    "empty": "No bookmarks yet",
+    "emptyMessage": "Start bookmarking your favorite verses while reading"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  }
+}

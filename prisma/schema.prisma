@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String?
+  name           String?
+  role           String    @default("USER")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  bookmarks      Bookmark[]
+  annotations    Annotation[]
+  sessions       Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Role values: USER, EDITOR, ADMIN
+
+model BibleVersion {
+  id           String     @id @default(cuid())
+  code         String     @unique       // e.g. "KJV", "NIV-ID"
+  title        String
+  language     String
+  description  String?
+  license      License?   @relation(fields: [licenseId], references: [id])
+  licenseId    String?
+  createdAt    DateTime   @default(now())
+  books        Book[]
+  importedAt   DateTime?
+}
+
+model License {
+  id         String  @id @default(cuid())
+  name       String
+  holder     String
+  text       String? // full license text or URL
+  fileUrl    String? // S3 url
+  createdAt  DateTime @default(now())
+  versions   BibleVersion[]
+}
+
+model Book {
+  id             String   @id @default(cuid())
+  bibleVersionId String
+  name           String
+  order          Int
+  chapters       Chapter[]
+
+  bibleVersion BibleVersion @relation(fields: [bibleVersionId], references: [id])
+}
+
+model Chapter {
+  id      String  @id @default(cuid())
+  bookId  String
+  number  Int
+  verses  Verse[]
+
+  book Book @relation(fields: [bookId], references: [id])
+}
+
+model Verse {
+  id         String   @id @default(cuid())
+  chapterId  String
+  number     Int
+  text       String
+  checksum   String   // for integrity checks
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  annotations Annotation[]
+  bookmarks   Bookmark[]
+
+  chapter Chapter @relation(fields: [chapterId], references: [id])
+}
+
+model Annotation {
+  id        String   @id @default(cuid())
+  userId    String
+  verseId   String
+  content   String
+  rangeStart Int?
+  rangeEnd   Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id])
+  verse Verse @relation(fields: [verseId], references: [id])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  verseId   String
+  name      String?
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  verse Verse @relation(fields: [verseId], references: [id])
+}
+
+model Upload {
+  id         String   @id @default(cuid())
+  filename   String
+  url        String
+  uploadedBy String?
+  mime       String
+  size       Int
+  createdAt  DateTime @default(now())
+}
+
+

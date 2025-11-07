@@ -1,0 +1,128 @@
+{
+  "app": {
+    "title": "Alkitab Kudus",
+    "subtitle": "Baca, Cari, dan Renungkan Firman Tuhan"
+  },
+  "nav": {
+    "read": "Baca",
+    "search": "Cari",
+    "bookmarks": "Markah",
+    "login": "Masuk",
+    "logout": "Keluar",
+    "darkMode": "Mode Gelap",
+    "lightMode": "Mode Terang",
+    "language": "Bahasa",
+    "loginToAccess": "Masuk untuk akses Markah"
+  },
+  "auth": {
+    "welcomeBack": "Selamat datang kembali!",
+    "startJourney": "Mulai perjalanan Anda",
+    "signIn": "Masuk",
+    "signUp": "Daftar",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirmPassword": "Konfirmasi Kata Sandi",
+    "username": "Nama Pengguna",
+    "rememberMe": "Ingat saya",
+    "forgotPassword": "Lupa kata sandi?",
+    "noAccount": "Belum punya akun?",
+    "haveAccount": "Sudah punya akun?",
+    "signInButton": "Masuk",
+    "signUpButton": "Mulai",
+    "signingIn": "Sedang masuk...",
+    "creatingAccount": "Membuat akun...",
+    "continueAsGuest": "Lanjutkan sebagai Tamu →",
+    "agreeTerms": "Dengan membuat akun, Anda menyetujui Syarat dan Ketentuan serta Kebijakan Privasi",
+    "heroTitle": "Berjalan bersama Kristus melalui Firman-Nya",
+    "heroSubtitle": "Rasakan Alkitab seperti tidak pernah sebelumnya. Baca, cari, dan renungkan Firman Tuhan dengan platform modern kami.",
+    "quote": "Akulah jalan, kebenaran, dan hidup",
+    "quoteReference": "Yohanes 14:6",
+    "stats": {
+      "books": "Kitab",
+      "chapters": "Pasal",
+      "verses": "Ayat"
+    },
+    "validation": {
+      "nameLength": "Nama harus minimal 2 karakter",
+      "passwordMatch": "Kata sandi tidak cocok",
+      "passwordLength": "Kata sandi harus minimal 8 karakter",
+      "passwordUppercase": "Kata sandi harus mengandung minimal 1 huruf besar",
+      "passwordLowercase": "Kata sandi harus mengandung minimal 1 huruf kecil",
+      "passwordNumber": "Kata sandi harus mengandung minimal 1 angka",
+      "agreeTermsRequired": "Anda harus menyetujui syarat dan ketentuan"
+    },
+    "passwordRequirements": {
+      "title": "Kata sandi harus mengandung:",
+      "length": "Minimal 8 karakter",
+      "uppercase": "1 huruf besar (A-Z)",
+      "lowercase": "1 huruf kecil (a-z)",
+      "number": "1 angka (0-9)"
+    },
+    "success": {
+      "login": "Login berhasil! Mengalihkan...",
+      "register": "Pendaftaran berhasil! Silakan masuk."
+    },
+    "error": {
+      "loginFailed": "Login gagal",
+      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+    }
+  },
+  "reader": {
+    "loading": "Memuat pasal Alkitab...",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "chapter": "Pasal",
+    "testament": "Perjanjian",
+    "verse": "Ayat",
+    "scrollToTop": "Kembali ke atas",
+    "translationNotice": "ℹ️ Terjemahan Indonesia sedang dalam pengembangan. Menampilkan versi English (KJV) untuk sementara."
+  },
+  "search": {
+    "title": "Cari di Alkitab",
+    "subtitle": "Jelajahi 31.102 ayat dari Kejadian hingga Wahyu",
+    "placeholder": "Cari ayat, kata kunci, atau referensi (mis., Yohanes 3:16)...",
+    "searchButton": "Cari",
+    "searching": "Mencari...",
+    "resultsFound": "Hasil",
+    "resultsFoundPlural": "Hasil Ditemukan",
+    "showingMatches": "Menampilkan hasil untuk",
+    "readChapter": "Baca Pasal →",
+    "noResults": "Tidak Ada Hasil",
+    "noResultsMessage": "Kami tidak dapat menemukan ayat yang cocok dengan",
+    "searchTips": {
+      "title": "Tips Pencarian:",
+      "verseRef": "Referensi Ayat: Coba \"Yohanes 3:16\", \"Kejadian 1:1\", atau \"Mazmur 23\"",
+      "bookChapter": "Kitab & Pasal: Cari \"Matius 5\" atau \"Roma 8\"",
+      "popular": "Ayat Populer: Klik tombol pencarian cepat di bawah"
+    },
+    "trySearch": "Coba",
+    "popularSearches": "Pencarian Populer",
+    "popularSubtitle": "Akses cepat ke ayat-ayat terkenal",
+    "bibleCoverage": "Cakupan Alkitab",
+    "coverageSubtitle": "Akses lengkap ke Kitab Suci",
+    "books": "Kitab",
+    "chapters": "Pasal",
+    "verses": "Ayat",
+    "popularVerses": {
+      "john316": "Karena begitu besar kasih Allah akan dunia ini",
+      "psalm23": "TUHAN adalah gembalaku",
+      "romans828": "Segala sesuatu turut bekerja untuk mendatangkan kebaikan"
+    }
+  },
+  "bookmarks": {
+    "title": "Markah Saya",
+    "subtitle": "Ayat dan bagian yang Anda simpan",
+    "empty": "Belum ada markah",
+    "emptyMessage": "Mulai menandai ayat favorit Anda saat membaca"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Kesalahan",
+    "success": "Berhasil",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "close": "Tutup"
+  }
+}
