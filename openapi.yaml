@@ -1,0 +1,639 @@
+openapi: 3.0.3
+info:
+  title: HOLY BIBLE API
+  version: 0.1.0
+  description: Backend API for Bible content, search, annotations, and admin import.
+servers:
+  - url: http://localhost:4000
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /auth/login:
+    post:
+      summary: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+
+  /auth/me:
+    get:
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /v1/versions:
+    get:
+      summary: List bible versions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BibleVersion'
+    post:
+      summary: Create new bible version (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BibleVersionCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BibleVersion'
+
+  /v1/versions/{versionCode}/books:
+    get:
+      summary: List books in a version
+      parameters:
+        - in: path
+          name: versionCode
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /v1/versions/{versionCode}/books/{bookId}/chapters/{chapterNumber}:
+    get:
+      summary: Get chapter with verses
+      parameters:
+        - in: path
+          name: versionCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: chapterNumber
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChapterWithVerses'
+
+  /v1/versions/{versionCode}/books/{bookId}/chapters/{chapterNumber}/verses/{verseNumber}:
+    get:
+      summary: Get single verse
+      parameters:
+        - in: path
+          name: versionCode
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: chapterNumber
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: verseNumber
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Verse'
+
+  /v1/search:
+    get:
+      summary: Search verses
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: version
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /v1/annotations:
+    post:
+      summary: Create annotation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+    get:
+      summary: List annotations by verse
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: verseId
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Annotation'
+
+  /v1/annotations/{id}:
+    delete:
+      summary: Delete annotation
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /v1/bookmarks:
+    post:
+      summary: Create bookmark
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+    get:
+      summary: List user's bookmarks
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bookmark'
+
+  /v1/admin/import:
+    post:
+      summary: Import translation file (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                versionCode:
+                  type: string
+                license:
+                  type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+
+  /v1/admin/jobs/{jobId}:
+    get:
+      summary: Get job status
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatus'
+
+  /v1/uploads:
+    post:
+      summary: Upload files
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upload'
+
+  /v1/audio/{verseId}:
+    get:
+      summary: Get audio tracks for verse
+      parameters:
+        - in: path
+          name: verseId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          type: string
+          enum: [USER, EDITOR, ADMIN]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BibleVersion:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        language:
+          type: string
+        description:
+          type: string
+        licenseId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        importedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    BibleVersionCreate:
+      type: object
+      required: [code, title, language]
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        language:
+          type: string
+        description:
+          type: string
+        licenseId:
+          type: string
+
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+
+    ChapterWithVerses:
+      type: object
+      properties:
+        id:
+          type: string
+        number:
+          type: integer
+        verses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Verse'
+
+    Verse:
+      type: object
+      properties:
+        id:
+          type: string
+        number:
+          type: integer
+        text:
+          type: string
+        checksum:
+          type: string
+
+    Annotation:
+      type: object
+      properties:
+        id:
+          type: string
+        verseId:
+          type: string
+        content:
+          type: string
+        rangeStart:
+          type: integer
+          nullable: true
+        rangeEnd:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AnnotationCreate:
+      type: object
+      required: [verseId, content]
+      properties:
+        verseId:
+          type: string
+        content:
+          type: string
+        rangeStart:
+          type: integer
+        rangeEnd:
+          type: integer
+
+    Bookmark:
+      type: object
+      properties:
+        id:
+          type: string
+        verseId:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    BookmarkCreate:
+      type: object
+      required: [verseId]
+      properties:
+        verseId:
+          type: string
+        name:
+          type: string
+
+    SearchResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        hits:
+          type: array
+          items:
+            type: object
+            properties:
+              versionCode:
+                type: string
+              bookName:
+                type: string
+              chapter:
+                type: integer
+              verse:
+                type: integer
+              text:
+                type: string
+              score:
+                type: number
+
+    JobStatus:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        progress:
+          type: number
+        message:
+          type: string
+
+    Upload:
+      type: object
+      properties:
+        id:
+          type: string
+        filename:
+          type: string
+        url:
+          type: string
+        mime:
+          type: string
+        size:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+
+
+
