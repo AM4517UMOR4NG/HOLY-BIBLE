@@ -6,6 +6,9 @@ dist/
 coverage/
 *.log
 
+# Vercel
+.vercel
+
 
 
 

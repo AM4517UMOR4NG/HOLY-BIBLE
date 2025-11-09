@@ -1,0 +1,48 @@
+services:
+  # Backend API
+  - type: web
+    name: holy-bible-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: holy-bible-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: holy-bible-redis
+          type: redis
+          property: connectionString
+      - key: JWT_PRIVATE_KEY
+        generateValue: true
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 3600
+      - key: REFRESH_TOKEN_EXPIRES
+        value: 30d
+      # Add these manually in Render dashboard
+      # - key: MEILI_HOST
+      #   value: https://your-meilisearch.com
+      # - key: MEILI_API_KEY
+      #   value: your-key
+      # - key: S3_ENDPOINT
+      #   value: your-s3-endpoint
+      # - key: S3_ACCESS_KEY
+      #   value: your-key
+      # - key: S3_SECRET_KEY
+      #   value: your-secret
+    healthCheckPath: /health
+
+databases:
+  - name: holy-bible-db
+    databaseName: holybible
+    user: hb_user
+
+  - name: holy-bible-redis
+    plan: starter
