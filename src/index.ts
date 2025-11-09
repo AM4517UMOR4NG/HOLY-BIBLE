@@ -18,7 +18,15 @@ import { registerUploadRoutes } from './routes/uploads.js';
 
 const server = Fastify({ logger: true });
 
-await server.register(cors, { origin: true, credentials: true });
+// CORS configuration - use environment variable or allow all in development
+const corsOrigin = process.env.CORS_ORIGIN 
+  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+  : (process.env.NODE_ENV === 'production' ? false : true);
+
+await server.register(cors, { 
+  origin: corsOrigin,
+  credentials: true 
+});
 await server.register(multipart);
 await server.register(swagger, {
   openapi: {
