@@ -1,0 +1,128 @@
+{
+  "app": {
+    "title": "Bíblia Sagrada",
+    "subtitle": "Leia, Pesquise e Medite na Palavra de Deus"
+  },
+  "nav": {
+    "read": "Ler",
+    "search": "Pesquisar",
+    "bookmarks": "Marcadores",
+    "login": "Entrar",
+    "logout": "Sair",
+    "darkMode": "Modo Escuro",
+    "lightMode": "Modo Claro",
+    "language": "Idioma",
+    "loginToAccess": "Entre para acessar os Marcadores"
+  },
+  "auth": {
+    "welcomeBack": "Bem-vindo de volta!",
+    "startJourney": "Comece sua jornada",
+    "signIn": "Entrar",
+    "signUp": "Cadastrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "confirmPassword": "Confirmar senha",
+    "username": "Nome de usuário",
+    "rememberMe": "Lembrar-me",
+    "forgotPassword": "Esqueceu a senha?",
+    "noAccount": "Não tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
+    "signInButton": "Entrar",
+    "signUpButton": "Começar",
+    "signingIn": "Entrando...",
+    "creatingAccount": "Criando conta...",
+    "continueAsGuest": "Continuar como convidado →",
+    "agreeTerms": "Ao criar uma conta, você concorda com os Termos e Condições e a Política de Privacidade",
+    "heroTitle": "Caminhe com Cristo através de Sua Palavra",
+    "heroSubtitle": "Experimente a Bíblia como nunca antes. Leia, pesquise e medite na Palavra de Deus com nossa plataforma moderna.",
+    "quote": "Eu sou o caminho, a verdade e a vida",
+    "quoteReference": "João 14:6",
+    "stats": {
+      "books": "Livros",
+      "chapters": "Capítulos",
+      "verses": "Versículos"
+    },
+    "validation": {
+      "nameLength": "O nome deve ter pelo menos 2 caracteres",
+      "passwordMatch": "As senhas não correspondem",
+      "passwordLength": "A senha deve ter pelo menos 8 caracteres",
+      "passwordUppercase": "A senha deve conter pelo menos 1 letra maiúscula",
+      "passwordLowercase": "A senha deve conter pelo menos 1 letra minúscula",
+      "passwordNumber": "A senha deve conter pelo menos 1 número",
+      "agreeTermsRequired": "Você deve concordar com os termos e condições"
+    },
+    "passwordRequirements": {
+      "title": "A senha deve conter:",
+      "length": "Pelo menos 8 caracteres",
+      "uppercase": "1 letra maiúscula (A-Z)",
+      "lowercase": "1 letra minúscula (a-z)",
+      "number": "1 número (0-9)"
+    },
+    "success": {
+      "login": "Login bem-sucedido! Redirecionando...",
+      "register": "Registro bem-sucedido! Por favor, faça login."
+    },
+    "error": {
+      "loginFailed": "Falha no login",
+      "genericError": "Ocorreu um erro. Por favor, tente novamente."
+    }
+  },
+  "reader": {
+    "loading": "Carregando capítulo da Bíblia...",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "chapter": "Capítulo",
+    "testament": "Testamento",
+    "verse": "Versículo",
+    "scrollToTop": "Voltar ao topo",
+    "translationNotice": "ℹ️ Exibindo a versão King James (KJV)"
+  },
+  "search": {
+    "title": "Pesquisar na Bíblia",
+    "subtitle": "Explore 31.102 versículos de Gênesis a Apocalipse",
+    "placeholder": "Pesquisar versículos, palavras-chave ou referências (ex., João 3:16)...",
+    "searchButton": "Pesquisar",
+    "searching": "Pesquisando...",
+    "resultsFound": "Resultado",
+    "resultsFoundPlural": "Resultados encontrados",
+    "showingMatches": "Mostrando correspondências para",
+    "readChapter": "Ler capítulo →",
+    "noResults": "Nenhum resultado encontrado",
+    "noResultsMessage": "Não conseguimos encontrar versículos correspondentes",
+    "searchTips": {
+      "title": "Dicas de pesquisa:",
+      "verseRef": "Referências de versículos: Tente \"João 3:16\", \"Gênesis 1:1\" ou \"Salmo 23\"",
+      "bookChapter": "Livro e capítulo: Pesquise \"Mateus 5\" ou \"Romanos 8\"",
+      "popular": "Versículos populares: Clique nos botões de pesquisa rápida abaixo"
+    },
+    "trySearch": "Tentar",
+    "popularSearches": "Pesquisas populares",
+    "popularSubtitle": "Acesso rápido a versículos famosos",
+    "bibleCoverage": "Cobertura bíblica",
+    "coverageSubtitle": "Acesso completo às Escrituras",
+    "books": "Livros",
+    "chapters": "Capítulos",
+    "verses": "Versículos",
+    "popularVerses": {
+      "john316": "Porque Deus amou o mundo de tal maneira",
+      "psalm23": "O Senhor é o meu pastor",
+      "romans828": "Todas as coisas cooperam juntamente"
+    }
+  },
+  "bookmarks": {
+    "title": "Meus marcadores",
+    "subtitle": "Seus versículos e passagens salvos",
+    "empty": "Ainda não há marcadores",
+    "emptyMessage": "Comece a marcar seus versículos favoritos durante a leitura"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar"
+  }
+}
