@@ -1,0 +1,128 @@
+{
+  "app": {
+    "title": "성경",
+    "subtitle": "하나님의 말씀을 읽고, 검색하고, 묵상하세요"
+  },
+  "nav": {
+    "read": "읽기",
+    "search": "검색",
+    "bookmarks": "북마크",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "language": "언어",
+    "loginToAccess": "북마크에 액세스하려면 로그인하세요"
+  },
+  "auth": {
+    "welcomeBack": "다시 오신 것을 환영합니다!",
+    "startJourney": "여정을 시작하세요",
+    "signIn": "로그인",
+    "signUp": "회원가입",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "username": "사용자 이름",
+    "rememberMe": "로그인 상태 유지",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "haveAccount": "이미 계정이 있으신가요?",
+    "signInButton": "로그인",
+    "signUpButton": "시작하기",
+    "signingIn": "로그인 중...",
+    "creatingAccount": "계정 생성 중...",
+    "continueAsGuest": "게스트로 계속 →",
+    "agreeTerms": "계정을 생성하면 이용 약관 및 개인정보 보호정책에 동의하는 것입니다",
+    "heroTitle": "그리스도의 말씀과 함께 걸으세요",
+    "heroSubtitle": "이전과는 다른 방식으로 성경을 경험하세요. 현대적인 플랫폼으로 하나님의 말씀을 읽고, 검색하고, 묵상하세요.",
+    "quote": "내가 곧 길이요 진리요 생명이니",
+    "quoteReference": "요한복음 14:6",
+    "stats": {
+      "books": "권",
+      "chapters": "장",
+      "verses": "절"
+    },
+    "validation": {
+      "nameLength": "이름은 최소 2자 이상이어야 합니다",
+      "passwordMatch": "비밀번호가 일치하지 않습니다",
+      "passwordLength": "비밀번호는 최소 8자 이상이어야 합니다",
+      "passwordUppercase": "비밀번호에 대문자가 최소 1개 포함되어야 합니다",
+      "passwordLowercase": "비밀번호에 소문자가 최소 1개 포함되어야 합니다",
+      "passwordNumber": "비밀번호에 숫자가 최소 1개 포함되어야 합니다",
+      "agreeTermsRequired": "이용 약관에 동의해야 합니다"
+    },
+    "passwordRequirements": {
+      "title": "비밀번호 요구사항:",
+      "length": "최소 8자",
+      "uppercase": "대문자 1개 (A-Z)",
+      "lowercase": "소문자 1개 (a-z)",
+      "number": "숫자 1개 (0-9)"
+    },
+    "success": {
+      "login": "로그인 성공! 리디렉션 중...",
+      "register": "가입 성공! 로그인해 주세요."
+    },
+    "error": {
+      "loginFailed": "로그인 실패",
+      "genericError": "오류가 발생했습니다. 다시 시도해 주세요."
+    }
+  },
+  "reader": {
+    "loading": "성경 장을 로드 중...",
+    "previous": "이전",
+    "next": "다음",
+    "chapter": "장",
+    "testament": "약",
+    "verse": "절",
+    "scrollToTop": "맨 위로",
+    "translationNotice": "ℹ️ 킹 제임스 버전 (KJV) 표시 중"
+  },
+  "search": {
+    "title": "성경 검색",
+    "subtitle": "창세기부터 요한계시록까지 31,102개 구절 탐색",
+    "placeholder": "구절, 키워드 또는 참조 검색 (예: 요한복음 3:16)...",
+    "searchButton": "검색",
+    "searching": "검색 중...",
+    "resultsFound": "결과",
+    "resultsFoundPlural": "결과 찾음",
+    "showingMatches": "일치하는 결과 표시",
+    "readChapter": "장 읽기 →",
+    "noResults": "결과 없음",
+    "noResultsMessage": "일치하는 구절을 찾을 수 없습니다",
+    "searchTips": {
+      "title": "검색 팁:",
+      "verseRef": "구절 참조: \"요한복음 3:16\", \"창세기 1:1\" 또는 \"시편 23\" 시도",
+      "bookChapter": "서적 및 장: \"마태복음 5\" 또는 \"로마서 8\" 검색",
+      "popular": "인기 구절: 아래 빠른 검색 버튼 클릭"
+    },
+    "trySearch": "시도",
+    "popularSearches": "인기 검색",
+    "popularSubtitle": "유명한 구절에 빠르게 액세스",
+    "bibleCoverage": "성경 범위",
+    "coverageSubtitle": "성경 전체 액세스",
+    "books": "권",
+    "chapters": "장",
+    "verses": "절",
+    "popularVerses": {
+      "john316": "하나님이 세상을 이처럼 사랑하사",
+      "psalm23": "여호와는 나의 목자시니",
+      "romans828": "모든 것이 합력하여"
+    }
+  },
+  "bookmarks": {
+    "title": "내 북마크",
+    "subtitle": "저장된 구절 및 단락",
+    "empty": "아직 북마크가 없습니다",
+    "emptyMessage": "읽는 동안 좋아하는 구절에 북마크를 추가하세요"
+  },
+  "common": {
+    "loading": "로드 중...",
+    "error": "오류",
+    "success": "성공",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "close": "닫기"
+  }
+}

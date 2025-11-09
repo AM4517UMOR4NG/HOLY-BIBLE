@@ -2,22 +2,24 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import enTranslation from '../locales/en.json'
 import idTranslation from '../locales/id.json'
+import esTranslation from '../locales/es.json'
+import ptTranslation from '../locales/pt.json'
+import zhTranslation from '../locales/zh.json'
+import koTranslation from '../locales/ko.json'
 
-// Get saved language or default to English
-// Handle localStorage safely for SSR/initial load
-let savedLanguage = 'en'
-try {
-  if (typeof window !== 'undefined') {
-    savedLanguage = localStorage.getItem('language') || 'en'
+// Safe function to get saved language (works on both client and server)
+const getSavedLanguage = () => {
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      return localStorage.getItem('language') || 'id'
+    } catch (e) {
+      console.warn('localStorage not accessible:', e)
+      return 'id'
+    }
   }
-} catch (error) {
-  console.warn('Failed to read language from localStorage:', error)
-}
-
-// Validate language code
-const validLanguages = ['en', 'id']
-if (!validLanguages.includes(savedLanguage)) {
-  savedLanguage = 'en'
+  // Default to Indonesian on server-side
+  return 'id'
 }
 
 // Initialize i18n
@@ -25,26 +27,34 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
+      id: {
+        translation: idTranslation
+      },
       en: {
         translation: enTranslation
       },
-      id: {
-        translation: idTranslation
+      es: {
+        translation: esTranslation
+      },
+      pt: {
+        translation: ptTranslation
+      },
+      zh: {
+        translation: zhTranslation
+      },
+      ko: {
+        translation: koTranslation
       }
     },
-    lng: savedLanguage,
-    fallbackLng: 'en',
-    debug: false, // Disable debug in production
+    lng: getSavedLanguage(),
+    fallbackLng: 'id', // Changed to Indonesian as primary fallback
+    debug: false,
     interpolation: {
       escapeValue: false // React already escapes values
     },
     react: {
-      useSuspense: false // Disable suspense to prevent errors
-    },
-    // Add compatibility options
-    compatibilityJSON: 'v3',
-    returnEmptyString: false,
-    returnNull: false
+      useSuspense: false // Better SSR support
+    }
   })
   .catch((error) => {
     console.error('Failed to initialize i18n:', error)

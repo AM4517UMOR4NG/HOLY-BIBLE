@@ -1,0 +1,128 @@
+{
+  "app": {
+    "title": "圣经",
+    "subtitle": "阅读、搜索和默想神的话语"
+  },
+  "nav": {
+    "read": "阅读",
+    "search": "搜索",
+    "bookmarks": "书签",
+    "login": "登录",
+    "logout": "退出",
+    "darkMode": "深色模式",
+    "lightMode": "浅色模式",
+    "language": "语言",
+    "loginToAccess": "登录以访问书签"
+  },
+  "auth": {
+    "welcomeBack": "欢迎回来！",
+    "startJourney": "开始你的旅程",
+    "signIn": "登录",
+    "signUp": "注册",
+    "email": "电子邮件",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "username": "用户名",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账户？",
+    "haveAccount": "已有账户？",
+    "signInButton": "登录",
+    "signUpButton": "开始",
+    "signingIn": "登录中...",
+    "creatingAccount": "创建账户中...",
+    "continueAsGuest": "以访客身份继续 →",
+    "agreeTerms": "创建账户即表示您同意条款和条件以及隐私政策",
+    "heroTitle": "通过祂的话语与基督同行",
+    "heroSubtitle": "以前所未有的方式体验圣经。使用我们的现代平台阅读、搜索和默想神的话语。",
+    "quote": "我就是道路、真理、生命",
+    "quoteReference": "约翰福音 14:6",
+    "stats": {
+      "books": "书卷",
+      "chapters": "章节",
+      "verses": "节"
+    },
+    "validation": {
+      "nameLength": "名称必须至少包含2个字符",
+      "passwordMatch": "密码不匹配",
+      "passwordLength": "密码必须至少包含8个字符",
+      "passwordUppercase": "密码必须包含至少1个大写字母",
+      "passwordLowercase": "密码必须包含至少1个小写字母",
+      "passwordNumber": "密码必须包含至少1个数字",
+      "agreeTermsRequired": "您必须同意条款和条件"
+    },
+    "passwordRequirements": {
+      "title": "密码必须包含：",
+      "length": "至少8个字符",
+      "uppercase": "1个大写字母 (A-Z)",
+      "lowercase": "1个小写字母 (a-z)",
+      "number": "1个数字 (0-9)"
+    },
+    "success": {
+      "login": "登录成功！重定向中...",
+      "register": "注册成功！请登录。"
+    },
+    "error": {
+      "loginFailed": "登录失败",
+      "genericError": "发生错误。请重试。"
+    }
+  },
+  "reader": {
+    "loading": "加载圣经章节中...",
+    "previous": "上一章",
+    "next": "下一章",
+    "chapter": "章",
+    "testament": "约",
+    "verse": "节",
+    "scrollToTop": "回到顶部",
+    "translationNotice": "ℹ️ 显示钦定版圣经 (KJV)"
+  },
+  "search": {
+    "title": "搜索圣经",
+    "subtitle": "探索从创世记到启示录的31,102节经文",
+    "placeholder": "搜索经文、关键词或引用（例如，约翰福音 3:16）...",
+    "searchButton": "搜索",
+    "searching": "搜索中...",
+    "resultsFound": "结果",
+    "resultsFoundPlural": "找到的结果",
+    "showingMatches": "显示匹配结果",
+    "readChapter": "阅读章节 →",
+    "noResults": "未找到结果",
+    "noResultsMessage": "我们找不到匹配的经文",
+    "searchTips": {
+      "title": "搜索提示：",
+      "verseRef": "经文引用：尝试「约翰福音 3:16」、「创世记 1:1」或「诗篇 23」",
+      "bookChapter": "书卷和章节：搜索「马太福音 5」或「罗马书 8」",
+      "popular": "热门经文：点击下面的快速搜索按钮"
+    },
+    "trySearch": "尝试",
+    "popularSearches": "热门搜索",
+    "popularSubtitle": "快速访问著名经文",
+    "bibleCoverage": "圣经覆盖范围",
+    "coverageSubtitle": "完整访问圣经",
+    "books": "书卷",
+    "chapters": "章节",
+    "verses": "节",
+    "popularVerses": {
+      "john316": "神爱世人",
+      "psalm23": "耶和华是我的牧者",
+      "romans828": "万事互相效力"
+    }
+  },
+  "bookmarks": {
+    "title": "我的书签",
+    "subtitle": "您保存的经文和段落",
+    "empty": "还没有书签",
+    "emptyMessage": "开始在阅读时添加书签到您喜爱的经文"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭"
+  }
+}
