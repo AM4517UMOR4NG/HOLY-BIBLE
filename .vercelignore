@@ -1,4 +1,9 @@
-# Ignore everything except frontend
-/*
-!/frontend
-!vercel.json
+node_modules
+.git
+.env
+.env.local
+*.log
+dist
+frontend/dist
+frontend/node_modules
+.DS_Store

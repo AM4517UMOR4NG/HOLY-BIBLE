@@ -9,6 +9,18 @@ coverage/
 # Vercel
 .vercel
 
+# Test files
+test-*.js
+test-*.ps1
+check-*.js
+start-all.*
+*.webp
+
+# Database
+*.db
+*.db-journal
+
+
 
 
 

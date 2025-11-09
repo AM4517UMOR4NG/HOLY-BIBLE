@@ -22,6 +22,7 @@ const getSavedLanguage = () => {
   return 'id'
 }
 
+// Initialize i18n
 i18n
   .use(initReactI18next)
   .init({
@@ -47,13 +48,16 @@ i18n
     },
     lng: getSavedLanguage(),
     fallbackLng: 'id', // Changed to Indonesian as primary fallback
+    debug: false,
     interpolation: {
       escapeValue: false // React already escapes values
     },
-    // Add these options for better SSR support
     react: {
-      useSuspense: false
+      useSuspense: false // Better SSR support
     }
+  })
+  .catch((error) => {
+    console.error('Failed to initialize i18n:', error)
   })
 
 export default i18n

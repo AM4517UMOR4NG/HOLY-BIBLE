@@ -19,4 +19,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    // Ensure JSON files are included in build
+    assetsInclude: ['**/*.json'],
+    rollupOptions: {
+      output: {
+        // Ensure proper handling of JSON imports
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith('.json')) {
+            return 'assets/[name][extname]'
+          }
+          return 'assets/[name]-[hash][extname]'
+        },
+      },
+    },
+  },
 })
