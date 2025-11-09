@@ -433,11 +433,8 @@ Lihat file [LICENSE](./LICENSE) untuk detail lengkap.
 
 ---
 
-## 📞 Support & Contact
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/HOLY_BIBLE/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/HOLY_BIBLE/discussions)
-- 📧 **Email**: support@holybible.app
+## 📞 Support 
+- 📧 **Email**: aekmohop@gmail.com
 
 ---
 
@@ -449,7 +446,7 @@ Jika proyek ini membantu Anda, pertimbangkan untuk memberikan ⭐ di GitHub!
 
 <div align="center">
 
-### 🌟 Dibuat dengan ❤️ untuk Komunitas
+### 🌟 Dibuat dengan SEMANGAT untuk Komunitas
 
 **"I am the way, the truth, and the life"** - John 14:6
 
