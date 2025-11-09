@@ -10,3 +10,4 @@ export function verseChecksum(text: string, chapterNumber: number, verseNumber: 
 
 
 
+
