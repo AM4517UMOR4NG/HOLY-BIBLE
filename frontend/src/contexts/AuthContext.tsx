@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { api } from '@/lib/api'
+import { api, API_BASE_URL } from '@/lib/api'
 
 interface User {
   id: string
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Verify token by fetching current user
-      const response = await fetch('http://localhost:4000/auth/me', {
+      const response = await fetch(`${API_BASE_URL}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -117,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // Call logout endpoint
       if (refreshToken) {
-        await fetch('http://localhost:4000/auth/logout', {
+        await fetch(`${API_BASE_URL}/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
