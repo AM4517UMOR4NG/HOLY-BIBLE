@@ -25,20 +25,6 @@ function AppContent() {
     return 'read'
   })
 
-  // Ensure root path redirects to read page on initial load
-  useEffect(() => {
-    const path = window.location.pathname
-    const validPaths = ['/search', '/bookmarks', '/auth', '/daily-verse', '/prayer', '/notes', '/plan']
-    if (path === '/' || (!validPaths.includes(path) && path !== '/read')) {
-      if (path !== '/' && path !== '/read') {
-        window.history.replaceState({}, '', '/')
-      }
-      if (currentPage !== 'read') {
-        setCurrentPage('read')
-      }
-    }
-  }, [currentPage])
-
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname
@@ -58,9 +44,6 @@ function AppContent() {
         setCurrentPage('plan')
       } else {
         setCurrentPage('read')
-        if (path !== '/' && path !== '/read') {
-          window.history.replaceState({}, '', '/')
-        }
       }
     }
 
@@ -89,6 +72,7 @@ function AppContent() {
     }
   }
 
+  // Render auth page without layout (no navbar)
   if (currentPage === 'auth') {
     return <AuthPage />
   }

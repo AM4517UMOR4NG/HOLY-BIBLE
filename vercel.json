@@ -1,9 +1,29 @@
 {
-  "buildCommand": "cd frontend && npm ci && npm run build",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm ci && npm run build && cd frontend && npm ci && npm run build",
+  "installCommand": "npm ci && cd frontend && npm ci",
   "outputDirectory": "frontend/dist",
-  "installCommand": "cd frontend && npm ci",
-  "framework": null,
   "rewrites": [
+    {
+      "source": "/v1/:path*",
+      "destination": "/api/v1/:path*"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "/api/auth/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/ready",
+      "destination": "/api/ready"
+    },
+    {
+      "source": "/docs/:path*",
+      "destination": "/api/docs/:path*"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

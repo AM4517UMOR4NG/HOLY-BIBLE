@@ -43,11 +43,3 @@ services:
 volumes:
   dbdata:
 
-
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
