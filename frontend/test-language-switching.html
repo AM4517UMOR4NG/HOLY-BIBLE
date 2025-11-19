@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switching Debug Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .info-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #ffd700;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.3);
+            border-left: 4px solid #f44336;
+        }
+        .warning {
+            background: rgba(255, 152, 0, 0.3);
+            border-left: 4px solid #ff9800;
+        }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Language Switching Debug Tool</h1>
+        
+        <div class="info-box">
+            <h3>📊 Current Status</h3>
+            <div id="status"></div>
+        </div>
+
+        <div class="info-box">
+            <h3>🔧 Quick Actions</h3>
+            <div class="language-grid">
+                <button onclick="setLanguage('id')">🇮🇩 Indonesian</button>
+                <button onclick="setLanguage('en')">🇬🇧 English</button>
+                <button onclick="setLanguage('es')">🇪🇸 Spanish</button>
+                <button onclick="setLanguage('pt')">🇵🇹 Portuguese</button>
+                <button onclick="setLanguage('zh')">🇨🇳 Chinese</button>
+                <button onclick="setLanguage('ko')">🇰🇷 Korean</button>
+            </div>
+            <button onclick="clearLanguage()" style="background: rgba(244, 67, 54, 0.5); width: 100%; margin-top: 10px;">
+                🗑️ Clear Language Cache
+            </button>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 localStorage Data</h3>
+            <pre id="localStorageData"></pre>
+        </div>
+
+        <div class="info-box">
+            <h3>ℹ️ Instructions</h3>
+            <ol>
+                <li>Click any language button to set language</li>
+                <li>Check the status to see current language</li>
+                <li>Open your app in another tab to test</li>
+                <li>Use "Clear Language Cache" to reset</li>
+            </ol>
+        </div>
+
+        <div class="info-box">
+            <h3>🐛 Debug Commands</h3>
+            <p>Open browser console and try:</p>
+            <pre>// Check current language
+console.log(localStorage.getItem('language'));
+
+// Set language manually
+localStorage.setItem('language', 'id');
+location.reload();
+
+// Clear all data
+localStorage.clear();
+location.reload();</pre>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            const statusDiv = document.getElementById('status');
+            const currentLang = localStorage.getItem('language');
+            
+            const langNames = {
+                'id': '🇮🇩 Indonesian (Bahasa Indonesia)',
+                'en': '🇬🇧 English',
+                'es': '🇪🇸 Spanish (Español)',
+                'pt': '🇵🇹 Portuguese (Português)',
+                'zh': '🇨🇳 Chinese (中文)',
+                'ko': '🇰🇷 Korean (한국어)'
+            };
+
+            if (!currentLang) {
+                statusDiv.innerHTML = `
+                    <div class="status warning">
+                        ⚠️ No language set. Will default to Indonesian on app load.
+                    </div>
+                `;
+            } else if (langNames[currentLang]) {
+                statusDiv.innerHTML = `
+                    <div class="status success">
+                        ✅ Current Language: <strong>${langNames[currentLang]}</strong><br>
+                        <small>Language Code: <code>${currentLang}</code></small>
+                    </div>
+                `;
+            } else {
+                statusDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Unknown language code: <code>${currentLang}</code><br>
+                        App will fall back to Indonesian.
+                    </div>
+                `;
+            }
+
+            // Update localStorage display
+            document.getElementById('localStorageData').textContent = 
+                JSON.stringify({
+                    language: currentLang || 'not set',
+                    timestamp: new Date().toLocaleString()
+                }, null, 2);
+        }
+
+        function setLanguage(lang) {
+            try {
+                localStorage.setItem('language', lang);
+                updateStatus();
+                
+                // Show success message
+                const statusDiv = document.getElementById('status');
+                const tempDiv = document.createElement('div');
+                tempDiv.className = 'status success';
+                tempDiv.innerHTML = `✅ Language set to <strong>${lang}</strong>! Reload your app to see changes.`;
+                statusDiv.appendChild(tempDiv);
+                
+                setTimeout(() => tempDiv.remove(), 3000);
+            } catch (e) {
+                alert('Error setting language: ' + e.message);
+            }
+        }
+
+        function clearLanguage() {
+            if (confirm('Are you sure you want to clear the language cache?')) {
+                localStorage.removeItem('language');
+                updateStatus();
+                alert('✅ Language cache cleared! App will use default (Indonesian) on next load.');
+            }
+        }
+
+        // Initial status update
+        updateStatus();
+
+        // Auto-refresh status every 2 seconds
+        setInterval(updateStatus, 2000);
+    </script>
+</body>
+</html>

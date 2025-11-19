@@ -2,6 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import enTranslation from '../locales/en.json'
 import idTranslation from '../locales/id.json'
+import ptTranslation from '../locales/pt.json'
 
 // Get saved language or default to English
 // Handle localStorage safely for SSR/initial load
@@ -15,7 +16,7 @@ try {
 }
 
 // Validate language code
-const validLanguages = ['en', 'id']
+const validLanguages = ['en', 'id', 'pt']
 if (!validLanguages.includes(savedLanguage)) {
   savedLanguage = 'en'
 }
@@ -30,6 +31,9 @@ i18n
       },
       id: {
         translation: idTranslation
+      },
+      pt: {
+        translation: ptTranslation
       }
     },
     lng: savedLanguage,
@@ -42,7 +46,7 @@ i18n
       useSuspense: false // Disable suspense to prevent errors
     },
     // Add compatibility options
-    compatibilityJSON: 'v3',
+    compatibilityJSON: 'v4',
     returnEmptyString: false,
     returnNull: false
   })

@@ -1,6 +1,7 @@
 // Bible API Integration
 // Using Bible API from https://bible-api.com/
-// Indonesian Bible is fetched via our backend proxy to Beeble API
+// Indonesian Bible uses backend proxy to Beeble API (avoids CORS issues)
+// Portuguese Bible uses bible-api.com with Almeida translation
 
 interface BibleVerse {
   book_name: string
@@ -19,12 +20,10 @@ interface BibleChapter {
 }
 
 const BIBLE_API_BASE = 'https://bible-api.com'
-const BACKEND_BASE: string = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000'
+const BACKEND_API = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000'
 
 // Get translation code based on language
-// Note: bible-api.com only supports English translations
-// For Indonesian, we use English as fallback for now
-function getTranslation(_language?: string): string {
+function getTranslation(language?: string): string {
   // Available translations in bible-api.com:
   // - kjv: King James Version
   // - web: World English Bible (default)
@@ -32,29 +31,62 @@ function getTranslation(_language?: string): string {
   // - almeida: João Ferreira de Almeida (Portuguese)
   // - rccv: Romanian Corrected Cornilescu Version
   
-  // Note: Indonesian (Terjemahan Baru) is not supported by this API
-  // We use English as default for all languages
-  return 'kjv'  // King James Version
+  switch (language) {
+    case 'pt':
+      return 'almeida'  // Portuguese - João Ferreira de Almeida
+    case 'en':
+    default:
+      return 'kjv'  // King James Version (English)
+  }
 }
 
 export async function getBibleChapter(book: string, chapter: number, language?: string): Promise<BibleChapter | null> {
   try {
-    // Use Indonesian (full Bible) through backend proxy when language is 'id'
+    console.log(`🔍 getBibleChapter called:`, { book, chapter, language })
+    
+    // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
-      const res = await fetch(`${BACKEND_BASE}/v1/id-bible/${book}/${chapter}`)
-      if (res.ok) {
-        return await res.json()
+      console.log('📖 [INDONESIAN] Fetching via backend proxy...')
+      console.log(`   ↳ URL: ${BACKEND_API}/v1/id-bible/${book}/${chapter}`)
+      
+      try {
+        const response = await fetch(`${BACKEND_API}/v1/id-bible/${book}/${chapter}`, {
+          headers: { 'Accept': 'application/json' }
+        })
+        
+        if (response.ok) {
+          const data = await response.json()
+          console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
+          console.log(`   ↳ Reference: ${data.reference}`)
+          console.log(`   ↳ Verses: ${data.verses?.length || 0}`)
+          return data
+        }
+        
+        console.warn(`⚠️ [INDONESIAN] Backend returned ${response.status}, falling back to English`)
+      } catch (backendError) {
+        console.warn('⚠️ [INDONESIAN] Backend unavailable, falling back to English')
+        console.log(`   ↳ Error: ${backendError instanceof Error ? backendError.message : 'Unknown'}`)
       }
-      console.warn('⚠️ Gagal memuat Alkitab Indonesia dari backend, fallback ke English')
+      
+      // Fallback to English if Indonesian fails
+      console.log('📖 [FALLBACK] Loading English version instead...')
     }
     
-    // Use English API for non-Indonesian or fallback
+    // Use bible-api.com for English and Portuguese (or fallback from Indonesian)
     const translation = getTranslation(language)
+    console.log(`📖 Fetching from bible-api.com (${translation})...`)
     const response = await fetch(`${BIBLE_API_BASE}/${book}${chapter}?translation=${translation}`)
-    if (!response.ok) return null
-    return await response.json()
+    
+    if (!response.ok) {
+      console.error(`❌ HTTP Error: ${response.status} ${response.statusText}`)
+      return null
+    }
+    
+    const data = await response.json()
+    console.log(`✅ Bible loaded: ${data.reference || 'Unknown'} - ${data.verses?.length || 0} verses`)
+    return data
   } catch (error) {
-    console.error('Error fetching Bible chapter:', error)
+    console.error('❌ Error fetching Bible chapter:', error)
     return null
   }
 }

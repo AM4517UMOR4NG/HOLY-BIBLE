@@ -15,7 +15,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const availableLanguages = [
     { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'id', name: 'Indonesia', flag: '🇮🇩' }
+    { code: 'id', name: 'Indonesia', flag: '🇮🇩' },
+    { code: 'pt', name: 'Português', flag: '🇵🇹' }
   ]
 
   const setLanguage = (lang: string) => {
