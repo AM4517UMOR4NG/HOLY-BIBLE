@@ -6,32 +6,6 @@
       "maxDuration": 10
     }
   },
-  "rewrites": [
-    {
-      "source": "/v1/:path*",
-      "destination": "/api/v1/:path*"
-    },
-    {
-      "source": "/auth/:path*",
-      "destination": "/api/auth/:path*"
-    },
-    {
-      "source": "/health",
-      "destination": "/api/health"
-    },
-    {
-      "source": "/ready",
-      "destination": "/api/ready"
-    },
-    {
-      "source": "/docs/:path*",
-      "destination": "/api/docs/:path*"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
