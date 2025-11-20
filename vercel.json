@@ -1,11 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
   "functions": {
     "api/**/*.ts": {
       "memory": 1024,
       "maxDuration": 10
     }
   },
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/api/.*", "dest": "/api" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
