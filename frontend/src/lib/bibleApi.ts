@@ -20,7 +20,22 @@ interface BibleChapter {
 }
 
 const BIBLE_API_BASE = 'https://bible-api.com'
-const BACKEND_API = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000'
+
+// Auto-detect API URL based on current location
+const getBackendUrl = () => {
+  // If VITE_API_URL is set, use it
+  if ((import.meta as any).env?.VITE_API_URL) {
+    return (import.meta as any).env.VITE_API_URL;
+  }
+  
+  // If running on Vercel (production), use same domain
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return window.location.origin;
+  }
+  
+  // Default to localhost for development
+  return 'http://localhost:4000';
+}
 
 // Get translation code based on language
 function getTranslation(language?: string): string {
@@ -43,6 +58,8 @@ function getTranslation(language?: string): string {
 export async function getBibleChapter(book: string, chapter: number, language?: string): Promise<BibleChapter | null> {
   try {
     console.log(`🔍 getBibleChapter called:`, { book, chapter, language })
+    const BACKEND_API = getBackendUrl()
+    console.log(`📍 Using backend API:`, BACKEND_API)
     
     // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
