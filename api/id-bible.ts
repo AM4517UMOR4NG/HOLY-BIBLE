@@ -21,35 +21,46 @@ function getIndonesianBookName(abbr: string): string | null {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // Enable CORS for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
   
+  // Handle preflight OPTIONS request
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
   
   try {
+    // Parse URL path to get book and chapter
+    // Expected URL: /api/id-bible?book=gen&chapter=1
     const { book, chapter } = req.query;
     
     if (!book || !chapter) {
-      return res.status(400).json({ message: 'Book and chapter required' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'Book and chapter parameters required' 
+      });
     }
 
     const indonesianBookName = getIndonesianBookName(book as string);
     
     if (!indonesianBookName) {
-      return res.status(400).json({ message: 'Unsupported book code' });
+      return res.status(400).json({ 
+        success: false,
+        message: `Unsupported book code: ${book}` 
+      });
     }
 
+    // Call Beeble API
     const url = `https://beeble.vercel.app/api/v1/passage/${encodeURIComponent(indonesianBookName)}/${chapter}?ver=tb`;
     const response = await fetch(url);
     
     if (!response.ok) {
-      return res.status(502).json({ message: 'Failed to fetch Indonesian Bible' });
+      return res.status(502).json({ 
+        success: false,
+        message: 'Failed to fetch Indonesian Bible from Beeble API' 
+      });
     }
     
     const json: any = await response.json();
@@ -74,12 +85,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       translation_note: 'Indonesian Bible from Beeble API'
     };
     
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error('Indonesian Bible API error:', error);
-    res.status(500).json({ 
-      message: 'Internal error', 
-      error: error instanceof Error ? error.message : 'Unknown'
+    return res.status(500).json({ 
+      success: false,
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }
