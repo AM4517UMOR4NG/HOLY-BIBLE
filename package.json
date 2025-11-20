@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
+    "build": "prisma generate && tsc -p tsconfig.json && npm run build:frontend && npm run copy:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "copy:frontend": "node -e \"const fs=require('fs');const path=require('path');if(fs.existsSync('public'))fs.rmSync('public',{recursive:true});fs.cpSync('frontend/dist','public',{recursive:true})\"",
     "start": "node dist/index.js",
     "lint": "eslint .",
     "prisma:generate": "prisma generate",

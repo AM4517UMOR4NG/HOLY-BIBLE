@@ -1,6 +1,6 @@
 // Bible API Integration
 // Using Bible API from https://bible-api.com/
-// Indonesian Bible uses backend proxy to Beeble API (avoids CORS issues)
+// Indonesian Bible uses backend proxy to Beeble API (via Fastify backend)
 // Portuguese Bible uses bible-api.com with Almeida translation
 
 interface BibleVerse {

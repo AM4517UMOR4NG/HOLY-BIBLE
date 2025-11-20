@@ -3,7 +3,6 @@ node_modules
 .env
 .env.local
 *.log
-dist
-frontend/dist
-frontend/node_modules
 .DS_Store
+# Note: dist and frontend/dist are ignored in source but will be built on Vercel
+# public directory will be generated during build and should not be ignored
