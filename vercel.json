@@ -1,11 +1,5 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
-  "functions": {
-    "api/**/*.ts": {
-      "memory": 1024,
-      "maxDuration": 10,
-      "includeFiles": "node_modules/**"
-    }
-  }
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "framework": null
 }
