@@ -20,7 +20,7 @@ interface BibleChapter {
 }
 
 const BIBLE_API_BASE = 'https://bible-api.com'
-const BEEBLE_API_BASE = 'https://beeble.vercel.app/api/v1'
+const BACKEND_API = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000'
 
 // Get translation code based on language
 function getTranslation(language?: string): string {
@@ -44,73 +44,31 @@ export async function getBibleChapter(book: string, chapter: number, language?: 
   try {
     console.log(`🔍 getBibleChapter called:`, { book, chapter, language })
     
-    // Indonesian Bible: Call Beeble API directly
+    // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
-      // Map book abbreviation to Indonesian name
-      const bookMap: Record<string, string> = {
-        gen: 'Kejadian', exo: 'Keluaran', lev: 'Imamat', num: 'Bilangan', deu: 'Ulangan',
-        jos: 'Yosua', jdg: 'Hakim-hakim', rut: 'Rut', '1sa': '1 Samuel', '2sa': '2 Samuel',
-        '1ki': '1 Raja-raja', '2ki': '2 Raja-raja', '1ch': '1 Tawarikh', '2ch': '2 Tawarikh',
-        ezr: 'Ezra', neh: 'Nehemia', est: 'Ester', job: 'Ayub', psa: 'Mazmur', pro: 'Amsal',
-        ecc: 'Pengkhotbah', sng: 'Kidung Agung', isa: 'Yesaya', jer: 'Yeremia', lam: 'Ratapan',
-        ezk: 'Yehezkiel', dan: 'Daniel', hos: 'Hosea', jol: 'Yoel', amo: 'Amos', oba: 'Obaja',
-        jon: 'Yunus', mic: 'Mikha', nam: 'Nahum', hab: 'Habakuk', zep: 'Zefanya', hag: 'Hagai',
-        zec: 'Zakharia', mal: 'Maleakhi', mat: 'Matius', mrk: 'Markus', luk: 'Lukas', jhn: 'Yohanes',
-        act: 'Kisah Para Rasul', rom: 'Roma', '1co': '1 Korintus', '2co': '2 Korintus', gal: 'Galatia',
-        eph: 'Efesus', php: 'Filipi', col: 'Kolose', '1th': '1 Tesalonika', '2th': '2 Tesalonika',
-        '1ti': '1 Timotius', '2ti': '2 Timotius', tit: 'Titus', phm: 'Filemon', heb: 'Ibrani',
-        jas: 'Yakobus', '1pe': '1 Petrus', '2pe': '2 Petrus', '1jn': '1 Yohanes', '2jn': '2 Yohanes',
-        '3jn': '3 Yohanes', jud: 'Yudas', rev: 'Wahyu'
-      }
+      console.log('📖 [INDONESIAN] Fetching via backend API...')
+      console.log(`   ↳ URL: ${BACKEND_API}/api/v1/id-bible/${book}/${chapter}`)
       
-      const indonesianBookName = bookMap[book.toLowerCase()]
-      
-      if (indonesianBookName) {
-        console.log('📖 [INDONESIAN] Fetching directly from Beeble API...')
-        console.log(`   ↳ Book: ${indonesianBookName} Chapter: ${chapter}`)
+      try {
+        const response = await fetch(`${BACKEND_API}/api/v1/id-bible/${book}/${chapter}`, {
+          headers: { 
+            'Accept': 'application/json'
+          },
+          mode: 'cors'
+        })
         
-        try {
-          const url = `${BEEBLE_API_BASE}/passage/${encodeURIComponent(indonesianBookName)}/${chapter}?ver=tb`
-          console.log(`   ↳ URL: ${url}`)
-          
-          const response = await fetch(url, {
-            headers: { 'Accept': 'application/json' }
-          })
-          
-          if (response.ok) {
-            const json: any = await response.json()
-            
-            // Transform Beeble API response to our format
-            const verses = (json?.data?.verses || [])
-              .filter((v: any) => v.type === 'content')
-              .map((v: any) => ({
-                book_id: book.toUpperCase(),
-                book_name: json?.data?.book?.name,
-                chapter: json?.data?.book?.chapter,
-                verse: v.verse,
-                text: v.content
-              }))
-            
-            const result = {
-              reference: `${json?.data?.book?.name} ${json?.data?.book?.chapter}`,
-              verses,
-              text: verses.map((v: any) => v.text).join(' '),
-              translation_id: 'tb',
-              translation_name: 'Terjemahan Baru (Indonesian)',
-              translation_note: 'Indonesian Bible from Beeble API'
-            }
-            
-            console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
-            console.log(`   ↳ Reference: ${result.reference}`)
-            console.log(`   ↳ Verses: ${result.verses.length}`)
-            return result
-          }
-          
-          console.warn(`⚠️ [INDONESIAN] Beeble API returned ${response.status}, falling back to English`)
-        } catch (beebleError) {
-          console.warn('⚠️ [INDONESIAN] Beeble API error, falling back to English')
-          console.log(`   ↳ Error: ${beebleError instanceof Error ? beebleError.message : 'Unknown'}`)
+        if (response.ok) {
+          const data = await response.json()
+          console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
+          console.log(`   ↳ Reference: ${data.reference}`)
+          console.log(`   ↳ Verses: ${data.verses?.length || 0}`)
+          return data
         }
+        
+        console.warn(`⚠️ [INDONESIAN] Backend returned ${response.status}, falling back to English`)
+      } catch (backendError) {
+        console.warn('⚠️ [INDONESIAN] Backend unavailable, falling back to English')
+        console.log(`   ↳ Error: ${backendError instanceof Error ? backendError.message : 'Unknown'}`)
       }
       
       // Fallback to English if Indonesian fails
