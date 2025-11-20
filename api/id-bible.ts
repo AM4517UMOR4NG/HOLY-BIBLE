@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+
 // Map English book abbreviations to Indonesian book names for Beeble API
 function getIndonesianBookName(abbr: string): string | null {
   const bookMap: Record<string, string> = {
