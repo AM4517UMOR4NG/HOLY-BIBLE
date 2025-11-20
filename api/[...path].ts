@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { buildApp } from '../src/app.js';
+import { buildApp } from '../dist/app.js';
 
 let app: Awaited<ReturnType<typeof buildApp>> | null = null;
 
