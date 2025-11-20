@@ -46,11 +46,11 @@ export async function getBibleChapter(book: string, chapter: number, language?: 
     
     // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
-      console.log('📖 [INDONESIAN] Fetching via backend proxy...')
-      console.log(`   ↳ URL: ${BACKEND_API}/v1/id-bible/${book}/${chapter}`)
+      console.log('📖 [INDONESIAN] Fetching via backend API...')
+      console.log(`   ↳ URL: ${BACKEND_API}/api/v1/id-bible/${book}/${chapter}`)
       
       try {
-        const response = await fetch(`${BACKEND_API}/v1/id-bible/${book}/${chapter}`, {
+        const response = await fetch(`${BACKEND_API}/api/v1/id-bible/${book}/${chapter}`, {
           headers: { 'Accept': 'application/json' }
         })
         
