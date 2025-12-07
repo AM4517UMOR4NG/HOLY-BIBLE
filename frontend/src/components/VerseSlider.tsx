@@ -31,14 +31,20 @@ export function VerseSlider() {
   useEffect(() => {
     let cancelled = false
     const load = async () => {
+      // Use Promise.all for parallel API calls instead of sequential
+      const results = await Promise.all(
+        refs.map(r => getBibleChapter(r.abbr, r.chapter, language))
+      )
+
       const out: SlideItem[] = []
-      for (const r of refs) {
-        const data = await getBibleChapter(r.abbr, r.chapter, language)
+      results.forEach((data, idx) => {
         if (data && data.verses) {
+          const r = refs[idx]
           const v = data.verses.find((x: any) => x.verse === r.verse)
-          if (v) out.push({ ref: r, text: v.text, book: v.book_name || '', })
+          if (v) out.push({ ref: r, text: v.text, book: v.book_name || '' })
         }
-      }
+      })
+
       if (!cancelled && out.length > 0) {
         setSlides(out)
         setIndex(0)
@@ -82,22 +88,19 @@ export function VerseSlider() {
           <img
             src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"
             alt="Spiritual"
-            className={`absolute inset-0 h-full w-full object-cover opacity-90 transform transition-all duration-500 ease-out ${
-              animIn ? 'opacity-90 scale-100' : 'opacity-0 scale-[1.02]'
-            }`}
+            className={`absolute inset-0 h-full w-full object-cover opacity-90 transform transition-all duration-500 ease-out ${animIn ? 'opacity-90 scale-100' : 'opacity-0 scale-[1.02]'
+              }`}
           />
           <div className="absolute inset-0 bg-linear-to-tr from-black/50 via-transparent to-black/20" />
         </div>
         {/* Verse content */}
         <div className="p-6 md:p-8 flex flex-col justify-center gap-4">
-          <div className={`text-sm text-blue-300/90 font-medium transition-all duration-500 ease-out ${
-            animIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-          }`}>
+          <div className={`text-sm text-blue-300/90 font-medium transition-all duration-500 ease-out ${animIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`}>
             {current.book} {current.ref.chapter}:{current.ref.verse}
           </div>
-          <div className={`text-xl md:text-2xl leading-relaxed text-gray-100 transition-all duration-500 ease-out ${
-            animIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-          }`}>
+          <div className={`text-xl md:text-2xl leading-relaxed text-gray-100 transition-all duration-500 ease-out ${animIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`}>
             {current.text}
           </div>
           <div className="flex items-center gap-2">

@@ -4,25 +4,30 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+
+  // Enable Vercel Edge caching for faster response times
+  // s-maxage: CDN cache for 1 hour
+  // stale-while-revalidate: Serve stale content while revalidating for 24 hours
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+
   // Handle OPTIONS for CORS preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-  
+
   try {
     // Get query params from URL
     const url = new URL(req.url, `http://${req.headers.host}`);
     const book = url.searchParams.get('book');
     const chapter = url.searchParams.get('chapter');
-    
+
     if (!book || !chapter) {
       return res.status(400).json({
         success: false,
         message: 'Missing book or chapter parameter'
       });
     }
-    
+
     // Map English book codes to Indonesian names
     const bookMap = {
       gen: 'Kejadian', exo: 'Keluaran', lev: 'Imamat', num: 'Bilangan', deu: 'Ulangan',
@@ -39,7 +44,7 @@ module.exports = async (req, res) => {
       jas: 'Yakobus', '1pe': '1 Petrus', '2pe': '2 Petrus', '1jn': '1 Yohanes', '2jn': '2 Yohanes',
       '3jn': '3 Yohanes', jud: 'Yudas', rev: 'Wahyu'
     };
-    
+
     const indonesianBook = bookMap[book.toLowerCase()];
     if (!indonesianBook) {
       return res.status(400).json({
@@ -47,17 +52,17 @@ module.exports = async (req, res) => {
         message: `Unknown book code: ${book}`
       });
     }
-    
+
     // Fetch from Beeble API
     const beebleUrl = `https://beeble.vercel.app/api/v1/passage/${encodeURIComponent(indonesianBook)}/${chapter}?ver=tb`;
     const response = await fetch(beebleUrl);
-    
+
     if (!response.ok) {
       throw new Error(`Beeble API returned ${response.status}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Transform response to our format
     const verses = (data?.data?.verses || [])
       .filter(v => v.type === 'content')
@@ -68,7 +73,7 @@ module.exports = async (req, res) => {
         verse: v.verse,
         text: v.content
       }));
-    
+
     return res.status(200).json({
       reference: `${data?.data?.book?.name} ${chapter}`,
       verses,
@@ -77,7 +82,7 @@ module.exports = async (req, res) => {
       translation_name: 'Terjemahan Baru (Indonesian)',
       translation_note: 'Indonesian Bible from Beeble API'
     });
-    
+
   } catch (error) {
     console.error('Indonesian Bible API error:', error);
     return res.status(500).json({

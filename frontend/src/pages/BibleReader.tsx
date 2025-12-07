@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight, ArrowUp, Loader2 } from 'lucide-react'
+import { useState, useEffect, memo } from 'react'
+import { ChevronLeft, ChevronRight, ArrowUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { getBibleChapter, BIBLE_BOOKS } from '@/lib/bibleApi'
+import { getBibleChapter, BIBLE_BOOKS, prefetchAdjacentChapters } from '@/lib/bibleApi'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { VerseSlider } from '@/components/VerseSlider'
@@ -9,6 +9,40 @@ import { VerseSlider } from '@/components/VerseSlider'
 interface Verse {
   number: number
   text: string
+}
+
+// Memoized verse item component to prevent unnecessary re-renders
+const VerseItem = memo(function VerseItem({ verse }: { verse: Verse }) {
+  return (
+    <div
+      id={`verse-${verse.number}`}
+      className="flex gap-4 group"
+    >
+      <span className="text-lg font-bold text-blue-400 min-w-10 shrink-0 pt-1">
+        {verse.number}
+      </span>
+      <p className="text-lg leading-relaxed flex-1 text-gray-200">
+        {verse.text}
+      </p>
+    </div>
+  )
+})
+
+// Skeleton loading component for better perceived performance
+function VerseSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="flex gap-4">
+          <div className="h-6 w-10 bg-slate-700 rounded shrink-0"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-5 bg-slate-700 rounded w-full"></div>
+            <div className="h-5 bg-slate-700 rounded w-4/5"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export function BibleReader() {
@@ -71,6 +105,8 @@ export function BibleReader() {
         }))
         setVerses(formattedVerses)
         setBookName(data.verses[0]?.book_name || currentBook.name)
+        // Prefetch adjacent chapters for instant navigation
+        prefetchAdjacentChapters(currentBook.abbr, currentChapter, currentBook.chapters, language)
       }
       setLoading(false)
     }
@@ -134,10 +170,18 @@ export function BibleReader() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-gray-600 dark:text-gray-400">{t('reader.loading')}</p>
+      <div className="max-w-4xl mx-auto">
+        {/* Hero Section Skeleton */}
+        <div className="relative overflow-hidden rounded-t-2xl bg-linear-to-br from-blue-500 via-blue-600 to-indigo-700 p-12 text-white shadow-2xl animate-pulse">
+          <div className="relative z-10 text-center">
+            <div className="h-12 bg-white/20 rounded-lg w-48 mx-auto mb-3"></div>
+            <div className="h-6 bg-white/20 rounded w-32 mx-auto mb-2"></div>
+            <div className="h-4 bg-white/20 rounded w-24 mx-auto"></div>
+          </div>
+        </div>
+        {/* Verses Skeleton */}
+        <div className="bg-[#1e293b] rounded-b-2xl p-8 shadow-xl">
+          <VerseSkeleton />
         </div>
       </div>
     )
@@ -150,12 +194,12 @@ export function BibleReader() {
         {/* Decorative background circles */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-        
+
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-8">
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm"
               onClick={goToPreviousChapter}
               disabled={currentBookIndex === 0 && currentChapter === 1}
@@ -163,9 +207,9 @@ export function BibleReader() {
               <ChevronLeft className="h-4 w-4 mr-1" />
               {t('reader.previous')}
             </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm"
               onClick={goToNextChapter}
               disabled={currentBookIndex === BIBLE_BOOKS.length - 1 && currentChapter === currentBook.chapters}
@@ -225,18 +269,7 @@ export function BibleReader() {
       <div className="bg-[#1e293b] rounded-b-2xl p-8 shadow-xl">
         <div className="space-y-6">
           {verses.map((verse) => (
-            <div
-              key={verse.number}
-              id={`verse-${verse.number}`}
-              className="flex gap-4 group"
-            >
-              <span className="text-lg font-bold text-blue-400 min-w-10 shrink-0 pt-1">
-                {verse.number}
-              </span>
-              <p className="text-lg leading-relaxed flex-1 text-gray-200">
-                {verse.text}
-              </p>
-            </div>
+            <VerseItem key={verse.number} verse={verse} />
           ))}
         </div>
       </div>

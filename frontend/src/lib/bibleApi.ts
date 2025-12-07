@@ -19,6 +19,68 @@ interface BibleChapter {
   translation_note: string
 }
 
+// ==================== CLIENT-SIDE CACHE ====================
+const CACHE_SIZE = 100;
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+const chapterCache = new Map<string, CacheEntry<BibleChapter>>();
+
+function getCacheKey(book: string, chapter: number, lang: string): string {
+  return `${book}-${chapter}-${lang || 'en'}`;
+}
+
+function getFromCache(key: string): BibleChapter | null {
+  const cached = chapterCache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log(`📦 [CACHE HIT] ${key}`);
+    return cached.data;
+  }
+  if (cached) {
+    chapterCache.delete(key); // Remove stale entry
+  }
+  return null;
+}
+
+function setCache(key: string, data: BibleChapter): void {
+  if (chapterCache.size >= CACHE_SIZE) {
+    // Remove oldest entry (LRU)
+    const firstKey = chapterCache.keys().next().value;
+    if (firstKey) chapterCache.delete(firstKey);
+  }
+  chapterCache.set(key, { data, timestamp: Date.now() });
+  console.log(`💾 [CACHE SET] ${key} (total: ${chapterCache.size})`);
+}
+
+// Prefetch adjacent chapters in background
+export function prefetchAdjacentChapters(bookAbbr: string, chapter: number, maxChapters: number, language?: string): void {
+  const lang = language || 'en';
+
+  // Prefetch next chapter
+  if (chapter < maxChapters) {
+    const nextKey = getCacheKey(bookAbbr, chapter + 1, lang);
+    if (!chapterCache.has(nextKey)) {
+      console.log(`🔮 [PREFETCH] ${bookAbbr} chapter ${chapter + 1}`);
+      getBibleChapter(bookAbbr, chapter + 1, language).catch(() => { });
+    }
+  }
+
+  // Prefetch previous chapter
+  if (chapter > 1) {
+    const prevKey = getCacheKey(bookAbbr, chapter - 1, lang);
+    if (!chapterCache.has(prevKey)) {
+      console.log(`🔮 [PREFETCH] ${bookAbbr} chapter ${chapter - 1}`);
+      getBibleChapter(bookAbbr, chapter - 1, language).catch(() => { });
+    }
+  }
+}
+
+// ==================== END CACHE ====================
+
 const BIBLE_API_BASE = 'https://bible-api.com'
 
 // Auto-detect API URL based on current location
@@ -27,12 +89,12 @@ const getBackendUrl = () => {
   if ((import.meta as any).env?.VITE_API_URL) {
     return (import.meta as any).env.VITE_API_URL;
   }
-  
+
   // If running on Vercel (production), use same domain
   if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
     return window.location.origin;
   }
-  
+
   // Default to localhost for development
   return 'http://localhost:4000';
 }
@@ -45,7 +107,7 @@ function getTranslation(language?: string): string {
   // - clementine: Clementine Latin Vulgate
   // - almeida: João Ferreira de Almeida (Portuguese)
   // - rccv: Romanian Corrected Cornilescu Version
-  
+
   switch (language) {
     case 'pt':
       return 'almeida'  // Portuguese - João Ferreira de Almeida
@@ -56,54 +118,64 @@ function getTranslation(language?: string): string {
 }
 
 export async function getBibleChapter(book: string, chapter: number, language?: string): Promise<BibleChapter | null> {
+  const cacheKey = getCacheKey(book, chapter, language || 'en');
+
+  // Check cache first
+  const cached = getFromCache(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   try {
     console.log(`🔍 getBibleChapter called:`, { book, chapter, language })
     const BACKEND_API = getBackendUrl()
     console.log(`📍 Using backend API:`, BACKEND_API)
-    
+
     // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
       console.log('📖 [INDONESIAN] Fetching via backend API...')
       console.log(`   ↳ URL: ${BACKEND_API}/api/indo-bible?book=${book}&chapter=${chapter}`)
-      
+
       try {
         const response = await fetch(`${BACKEND_API}/api/indo-bible?book=${book}&chapter=${chapter}`, {
-          headers: { 
+          headers: {
             'Accept': 'application/json'
           },
           mode: 'cors'
         })
-        
+
         if (response.ok) {
           const data = await response.json()
           console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
           console.log(`   ↳ Reference: ${data.reference}`)
           console.log(`   ↳ Verses: ${data.verses?.length || 0}`)
+          setCache(cacheKey, data);
           return data
         }
-        
+
         console.warn(`⚠️ [INDONESIAN] Backend returned ${response.status}, falling back to English`)
       } catch (backendError) {
         console.warn('⚠️ [INDONESIAN] Backend unavailable, falling back to English')
         console.log(`   ↳ Error: ${backendError instanceof Error ? backendError.message : 'Unknown'}`)
       }
-      
+
       // Fallback to English if Indonesian fails
       console.log('📖 [FALLBACK] Loading English version instead...')
     }
-    
+
     // Use bible-api.com for English and Portuguese (or fallback from Indonesian)
     const translation = getTranslation(language)
     console.log(`📖 Fetching from bible-api.com (${translation})...`)
     const response = await fetch(`${BIBLE_API_BASE}/${book}${chapter}?translation=${translation}`)
-    
+
     if (!response.ok) {
       console.error(`❌ HTTP Error: ${response.status} ${response.statusText}`)
       return null
     }
-    
+
     const data = await response.json()
     console.log(`✅ Bible loaded: ${data.reference || 'Unknown'} - ${data.verses?.length || 0} verses`)
+    setCache(cacheKey, data);
     return data
   } catch (error) {
     console.error('❌ Error fetching Bible chapter:', error)
@@ -127,7 +199,7 @@ export async function getBibleVerse(book: string, chapter: number, verse: number
 export async function searchBible(query: string, language?: string): Promise<any> {
   try {
     const normalizedQuery = query.trim()
-    
+
     // Map Indonesian book names -> abbreviation used by API (e.g., "Kejadian" -> "gen")
     const BOOK_NAME_ID: Record<string, string> = {
       gen: 'Kejadian', exo: 'Keluaran', lev: 'Imamat', num: 'Bilangan', deu: 'Ulangan',
@@ -151,7 +223,7 @@ export async function searchBible(query: string, language?: string): Promise<any
     const EN_NAME_TO_ABBR: Record<string, string> = Object.fromEntries(
       BIBLE_BOOKS.map(b => [b.name.toLowerCase(), b.abbr])
     )
-    
+
     // Normalize Indonesian queries to use abbreviations understood by API
     const prepareQueryForApi = (q: string) => {
       if (language !== 'id') return q
@@ -176,7 +248,7 @@ export async function searchBible(query: string, language?: string): Promise<any
     }
     const queryForApi = prepareQueryForApi(normalizedQuery)
     const translation = getTranslation(language)
-    
+
     // Strategy 1: Try direct verse reference (e.g., "John 3:16", "Genesis 1", "Psalm 23")
     try {
       const response = await fetch(`${BIBLE_API_BASE}/${encodeURIComponent(queryForApi)}?translation=${translation}`)
@@ -189,7 +261,7 @@ export async function searchBible(query: string, language?: string): Promise<any
     } catch (e) {
       console.log('Not a verse reference, trying other strategies...')
     }
-    
+
     // Strategy 2: Check if it's a book name (e.g., "Revelation", "Genesis")
     const lowerQ = normalizedQuery.toLowerCase()
     const bookMatch = BIBLE_BOOKS.find(book => {
@@ -198,7 +270,7 @@ export async function searchBible(query: string, language?: string): Promise<any
         book.abbr.toLowerCase() === lowerQ ||
         (idName ? idName.toLowerCase() === lowerQ : false)
     })
-    
+
     if (bookMatch) {
       // Return first chapter of the book
       try {
@@ -216,7 +288,7 @@ export async function searchBible(query: string, language?: string): Promise<any
         console.error('Error fetching book:', e)
       }
     }
-    
+
     // Strategy 3: Keyword search in popular verses
     const searchVerses = [
       'John 3:16', 'John 3:16-17', 'Genesis 1:1', 'Genesis 1:1-3',
@@ -229,9 +301,9 @@ export async function searchBible(query: string, language?: string): Promise<any
       'Proverbs 16:3', 'Psalm 46:1', 'Matthew 11:28-30',
       'John 1:1-5', 'Revelation 21:4', 'Isaiah 41:10'
     ]
-    
+
     console.log(`Searching for keyword: "${normalizedQuery}" in ${searchVerses.length} verses...`)
-    
+
     const results = await Promise.all(
       searchVerses.map(async (ref) => {
         try {
@@ -240,11 +312,11 @@ export async function searchBible(query: string, language?: string): Promise<any
             const data = await res.json()
             if (data.verses) {
               // Check if any verse contains the query (case insensitive)
-              const matchingVerses = data.verses.filter((v: any) => 
+              const matchingVerses = data.verses.filter((v: any) =>
                 v.text.toLowerCase().includes(normalizedQuery.toLowerCase()) ||
                 v.book_name.toLowerCase().includes(normalizedQuery.toLowerCase())
               )
-              
+
               if (matchingVerses.length > 0) {
                 return {
                   ...data,
@@ -259,20 +331,20 @@ export async function searchBible(query: string, language?: string): Promise<any
         return null
       })
     )
-    
+
     const validResults = results.filter(r => r !== null)
-    
+
     if (validResults.length > 0) {
       const allVerses = validResults.flatMap(r => r.verses)
       console.log(`Found ${allVerses.length} matching verses`)
-      
+
       return {
         verses: allVerses,
         text: allVerses.map((v: any) => v.text).join(' '),
         reference: `Search results for "${normalizedQuery}"`
       }
     }
-    
+
     console.log('No results found')
     return null
   } catch (error) {
@@ -323,7 +395,7 @@ export const BIBLE_BOOKS = [
   { name: 'Haggai', abbr: 'hag', chapters: 2, testament: 'Old' },
   { name: 'Zechariah', abbr: 'zec', chapters: 14, testament: 'Old' },
   { name: 'Malachi', abbr: 'mal', chapters: 4, testament: 'Old' },
-  
+
   // New Testament
   { name: 'Matthew', abbr: 'mat', chapters: 28, testament: 'New' },
   { name: 'Mark', abbr: 'mrk', chapters: 16, testament: 'New' },
