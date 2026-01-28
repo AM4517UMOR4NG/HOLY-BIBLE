@@ -1,5 +1,3 @@
-<div align="center">
-
 #  HOLY BIBLE 
 
 ### 📖 Digital Alkitab 
@@ -46,10 +44,7 @@ Menyediakan akses mudah, cepat, dan interaktif terhadap Alkitab dalam berbagai b
 ### Multi-Language Support
 - Bahasa Indonesia
 - English
-- Espanol
 - Portugues
-- Chinese
-- Korean
 
 ### Authentication & Security
 - Sistem autentikasi JWT
