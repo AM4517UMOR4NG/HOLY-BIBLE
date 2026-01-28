@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✨ HOLY BIBLE ✨
+#  HOLY BIBLE 
 
 ### 📖 Digital Alkitab 
 
