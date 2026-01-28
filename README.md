@@ -209,7 +209,6 @@ chmod +x start-all.sh
 - [Panduan Lengkap](./PANDUAN_MENJALANKAN.md)
 - [Setup Checklist](./SETUP_CHECKLIST.md)
 - [Command Reference](./COMMANDS.md)
-- [Quick Deploy Guide](./QUICK_DEPLOY_GUIDE.md)
 
 ### Authentication
 - [Quick Reference](./AUTH_QUICK_REFERENCE.md)
