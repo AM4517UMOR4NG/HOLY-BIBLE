@@ -15,12 +15,6 @@
 
 HOLY BIBLE adalah platform digital Alkitab modern yang dirancang untuk memberikan pengalaman membaca, mempelajari, dan merenungkan Firman Tuhan. Dibangun dengan teknologi terdepan, aplikasi ini menawarkan antarmuka yang bersih, performa tinggi, dan fitur-fitur untuk mendukung perjalanan rohani Anda.
 
-### Visi
-
-Menyediakan akses mudah, cepat, dan interaktif terhadap Alkitab dalam berbagai bahasa dan versi.
-
----
-
 ## Fitur Utama
 
 ### Pembaca Alkitab
