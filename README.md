@@ -377,7 +377,7 @@ Kontribusi sangat diterima!
 - Ikuti code style yang ada
 - Tambahkan tests untuk fitur baru
 - Update dokumentasi jika perlu
-- Pastikan semua tests pass
+- Pastikan semua test pass
 
 ---
 
