@@ -70,7 +70,7 @@ Prisma    Redis    Meilisearch
     PostgreSQL / SQLite
 ```
 
-**Teknologi Backend:**
+**Backend:**
 - Fastify - Web framework
 - Prisma - ORM
 - Meilisearch - Search engine
