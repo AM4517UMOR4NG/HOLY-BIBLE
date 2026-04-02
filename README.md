@@ -373,12 +373,6 @@ Kontribusi sangat diterima!
 4. Push ke branch (`git push origin feature/AmazingFeature`)
 5. Buka Pull Request
 
-### Guidelines:
-- Ikuti code style yang ada
-- Tambahkan tests untuk fitur baru
-- Update dokumentasi jika perlu
-- Pastikan semua test pass
-
 ---
 
 ## License
