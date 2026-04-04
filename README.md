@@ -21,8 +21,7 @@ HOLY BIBLE adalah platform digital Alkitab modern yang dirancang untuk memberika
 - Antarmuka yang bersih dan bebas gangguan
 - Navigasi mudah antar kitab, pasal, dan ayat
 - Dukungan multi-versi Alkitab (KJV, TB, dll)
-- Mode malam untuk membaca yang nyaman
-- Responsif di semua perangkat
+- Mode malam untuk membaca yang nyamman
 
 ### Pencarian
 - Pencarian full-text yang cepat dan akurat
