@@ -156,7 +156,6 @@ Services yang berjalan:
 npm install
 npm run prisma:generate
 npm run prisma:migrate
-npm run seed:sample  # Optional
 ```
 
 ### 5. Start Development Servers
