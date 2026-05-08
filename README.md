@@ -144,7 +144,7 @@ VITE_API_URL=http://localhost:4000
 docker compose up -d
 ```
 
-Services yang berjalan:
+Services berjalan:
 - PostgreSQL: localhost:5432
 - Redis: localhost:6379
 - Meilisearch: http://localhost:7700
