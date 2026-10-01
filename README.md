@@ -13,7 +13,8 @@
 
 ## Tentang Proyek
 
-HOLY BIBLE adalah platform digital Alkitab modern yang dirancang untuk memberikan pengalaman membaca, mempelajari, dan merenungkan Firman Tuhan. Dibangun dengan teknologi terdepan, aplikasi ini menawarkan antarmuka yang bersih, performa tinggi, dan fitur-fitur untuk mendukung perjalanan rohani Anda.
+HOLY BIBLE adalah platform digital Alkitab modern yang dirancang untuk memberikan pengalaman big updated
+, mempelajari, dan merenungkan Firman Tuhan. Dibangun dengan teknologi terdepan, aplikasi ini menawarkan antarmuka yang bersih, performa tinggi, dan fitur-fitur untuk mendukung perjalanan rohani Anda.
 
 ## Fitur Utama
 
