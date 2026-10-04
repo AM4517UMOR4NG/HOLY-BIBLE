@@ -8,11 +8,11 @@ interface Props {
 }
 
 const PRESETS = [
-  'https://img.freepik.com/vektor-gratis/ilustrasi-pria-muda-tersenyum_1308-174669.jpg?semt=ais_hybrid&w=740&q=80',
-  'https://img.freepik.com/free-vector/smiling-blonde-boy-hoodie_1308-174731.jpg?semt=ais_hybrid&w=740&q=80',
-  'https://img.freepik.com/free-vector/woman-with-braided-hair-illustration_1308-174675.jpg?semt=ais_hybrid&w=740&q=80',
-  'https://img.freepik.com/free-vector/young-woman-with-braided-hair_1308-176626.jpg?semt=ais_hybrid&w=740&q=80',
-  'https://img.freepik.com/psd-gratis/ilustrasi-3d-dari-avatar-atau-profil-manusia_23-2150671142.jpg?semt=ais_hybrid&w=740&q=80'
+  'https://img.freepik.com/vektor-gratis/ilustrasi-pria-muda-tersenyum_1308-174669.jpg?semt=ais_hybrid&w=128&q=70',
+  'https://img.freepik.com/free-vector/smiling-blonde-boy-hoodie_1308-174731.jpg?semt=ais_hybrid&w=128&q=70',
+  'https://img.freepik.com/free-vector/woman-with-braided-hair-illustration_1308-174675.jpg?semt=ais_hybrid&w=128&q=70',
+  'https://img.freepik.com/free-vector/young-woman-with-braided-hair_1308-176626.jpg?semt=ais_hybrid&w=128&q=70',
+  'https://img.freepik.com/psd-gratis/ilustrasi-3d-dari-avatar-atau-profil-manusia_23-2150671142.jpg?semt=ais_hybrid&w=128&q=70'
 ]
 
 export function AvatarPickerModal({ open, onClose, onSelect }: Props) {
@@ -48,7 +48,7 @@ export function AvatarPickerModal({ open, onClose, onSelect }: Props) {
             <div className="grid grid-cols-5 gap-3">
               {PRESETS.map((src) => (
                 <button key={src} onClick={() => { onSelect(src); onClose() }} className="relative rounded-full overflow-hidden border border-gray-700 hover:border-blue-500 transition-colors">
-                  <img src={src} alt="avatar" className="h-16 w-16 object-cover" />
+                  <img src={src} alt="avatar" className="h-16 w-16 object-cover" loading="lazy" decoding="async" width="64" height="64" />
                 </button>
               ))}
             </div>
