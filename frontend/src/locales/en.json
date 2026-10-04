@@ -12,7 +12,12 @@
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
     "language": "Language",
-    "loginToAccess": "Login to access Bookmarks"
+    "loginToAccess": "Login to access Bookmarks",
+    "menu": "Menu",
+    "dailyVerse": "Daily Verse",
+    "prayer": "Prayer",
+    "notes": "Notes",
+    "readingPlan": "Reading Plan"
   },
   "auth": {
     "welcomeBack": "Welcome back!",
