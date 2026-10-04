@@ -19,9 +19,11 @@ interface BibleChapter {
   translation_note: string
 }
 
-// ==================== CLIENT-SIDE CACHE ====================
-const CACHE_SIZE = 100;
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+// ==================== PERSISTENT CLIENT-SIDE CACHE ====================
+const CACHE_SIZE = 150;
+const STORAGE_PREFIX = 'bible_ch_v2_';
+const STORAGE_KEYS_LIST = 'bible_ch_keys_v2';
+const MAX_STORAGE_ITEMS = 60;
 
 interface CacheEntry<T> {
   data: T;
@@ -29,31 +31,86 @@ interface CacheEntry<T> {
 }
 
 const chapterCache = new Map<string, CacheEntry<BibleChapter>>();
+const verseCache = new Map<string, BibleVerse>();
+const searchCache = new Map<string, any>();
 
 function getCacheKey(book: string, chapter: number, lang: string): string {
-  return `${book}-${chapter}-${lang || 'en'}`;
+  return `${book.toLowerCase()}-${chapter}-${lang || 'en'}`;
 }
 
 function getFromCache(key: string): BibleChapter | null {
+  // 1. Memory cache (0ms)
   const cached = chapterCache.get(key);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`📦 [CACHE HIT] ${key}`);
+  if (cached) {
     return cached.data;
   }
-  if (cached) {
-    chapterCache.delete(key); // Remove stale entry
+
+  // 2. Persistent localStorage cache (survives page reloads & closes)
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const raw = localStorage.getItem(STORAGE_PREFIX + key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.data) {
+          chapterCache.set(key, { data: parsed.data, timestamp: parsed.timestamp || Date.now() });
+          return parsed.data;
+        }
+      }
+    } catch (e) {
+      // ignore storage access error
+    }
   }
+
   return null;
 }
 
 function setCache(key: string, data: BibleChapter): void {
+  // 1. Memory cache
   if (chapterCache.size >= CACHE_SIZE) {
-    // Remove oldest entry (LRU)
     const firstKey = chapterCache.keys().next().value;
     if (firstKey) chapterCache.delete(firstKey);
   }
   chapterCache.set(key, { data, timestamp: Date.now() });
-  console.log(`💾 [CACHE SET] ${key} (total: ${chapterCache.size})`);
+
+  // 2. Persistent storage
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify({ data, timestamp: Date.now() }));
+      
+      // Maintain LRU keys list
+      let keys: string[] = [];
+      const rawKeys = localStorage.getItem(STORAGE_KEYS_LIST);
+      if (rawKeys) {
+        try { keys = JSON.parse(rawKeys); } catch {}
+      }
+      keys = keys.filter(k => k !== key);
+      keys.push(key);
+      while (keys.length > MAX_STORAGE_ITEMS) {
+        const evict = keys.shift();
+        if (evict) localStorage.removeItem(STORAGE_PREFIX + evict);
+      }
+      localStorage.setItem(STORAGE_KEYS_LIST, JSON.stringify(keys));
+    } catch (e) {
+      // If storage quota exceeded, clear half of cached chapters
+      try {
+        const rawKeys = localStorage.getItem(STORAGE_KEYS_LIST);
+        if (rawKeys) {
+          const keys: string[] = JSON.parse(rawKeys);
+          const evictCount = Math.ceil(keys.length / 2);
+          for (let i = 0; i < evictCount; i++) {
+            localStorage.removeItem(STORAGE_PREFIX + keys[i]);
+          }
+          localStorage.setItem(STORAGE_KEYS_LIST, JSON.stringify(keys.slice(evictCount)));
+        }
+      } catch {}
+    }
+  }
+}
+
+// Synchronous chapter getter for instant initial rendering
+export function getCachedBibleChapter(book: string, chapter: number, language?: string): BibleChapter | null {
+  const key = getCacheKey(book, chapter, language || 'en');
+  return getFromCache(key);
 }
 
 // Prefetch adjacent chapters in background
@@ -63,8 +120,7 @@ export function prefetchAdjacentChapters(bookAbbr: string, chapter: number, maxC
   // Prefetch next chapter
   if (chapter < maxChapters) {
     const nextKey = getCacheKey(bookAbbr, chapter + 1, lang);
-    if (!chapterCache.has(nextKey)) {
-      console.log(`🔮 [PREFETCH] ${bookAbbr} chapter ${chapter + 1}`);
+    if (!getFromCache(nextKey)) {
       getBibleChapter(bookAbbr, chapter + 1, language).catch(() => { });
     }
   }
@@ -72,8 +128,7 @@ export function prefetchAdjacentChapters(bookAbbr: string, chapter: number, maxC
   // Prefetch previous chapter
   if (chapter > 1) {
     const prevKey = getCacheKey(bookAbbr, chapter - 1, lang);
-    if (!chapterCache.has(prevKey)) {
-      console.log(`🔮 [PREFETCH] ${bookAbbr} chapter ${chapter - 1}`);
+    if (!getFromCache(prevKey)) {
       getBibleChapter(bookAbbr, chapter - 1, language).catch(() => { });
     }
   }
@@ -132,35 +187,76 @@ export async function getBibleChapter(book: string, chapter: number, language?: 
     console.log(`📍 Using backend API:`, BACKEND_API)
 
     // Indonesian Bible: Try backend proxy first, fallback to English
+    // Indonesian Bible: Try backend proxy first, fallback to English
     if (language === 'id') {
       console.log('📖 [INDONESIAN] Fetching via backend API...')
-      console.log(`   ↳ URL: ${BACKEND_API}/api/indo-bible?book=${book}&chapter=${chapter}`)
+      
+      // Try /api/indo-bible query format
+      let response = await fetch(`${BACKEND_API}/api/indo-bible?book=${encodeURIComponent(book)}&chapter=${chapter}`, {
+        headers: { 'Accept': 'application/json' },
+        mode: 'cors'
+      }).catch(() => null)
 
-      try {
-        const response = await fetch(`${BACKEND_API}/api/indo-bible?book=${book}&chapter=${chapter}`, {
-          headers: {
-            'Accept': 'application/json'
-          },
+      // Fallback: try /v1/id-bible/:book/:chapter route format
+      if (!response || !response.ok) {
+        response = await fetch(`${BACKEND_API}/v1/id-bible/${encodeURIComponent(book)}/${chapter}`, {
+          headers: { 'Accept': 'application/json' },
           mode: 'cors'
-        })
-
-        if (response.ok) {
-          const data = await response.json()
-          console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
-          console.log(`   ↳ Reference: ${data.reference}`)
-          console.log(`   ↳ Verses: ${data.verses?.length || 0}`)
-          setCache(cacheKey, data);
-          return data
-        }
-
-        console.warn(`⚠️ [INDONESIAN] Backend returned ${response.status}, falling back to English`)
-      } catch (backendError) {
-        console.warn('⚠️ [INDONESIAN] Backend unavailable, falling back to English')
-        console.log(`   ↳ Error: ${backendError instanceof Error ? backendError.message : 'Unknown'}`)
+        }).catch(() => null)
       }
 
-      // Fallback to English if Indonesian fails
-      console.log('📖 [FALLBACK] Loading English version instead...')
+      if (response && response.ok) {
+        const data = await response.json()
+        console.log('✅ [INDONESIAN] Alkitab loaded successfully!')
+        setCache(cacheKey, data);
+        return data
+      }
+
+      console.warn('⚠️ [INDONESIAN] Backend unavailable, trying direct Beeble API...')
+      // Direct Beeble fallback
+      const bookMap: Record<string, string> = {
+        gen: 'Kejadian', exo: 'Keluaran', lev: 'Imamat', num: 'Bilangan', deu: 'Ulangan',
+        jos: 'Yosua', jdg: 'Hakim-hakim', rut: 'Rut', '1sa': '1 Samuel', '2sa': '2 Samuel',
+        '1ki': '1 Raja-raja', '2ki': '2 Raja-raja', '1ch': '1 Tawarikh', '2ch': '2 Tawarikh',
+        ezr: 'Ezra', neh: 'Nehemia', est: 'Ester', job: 'Ayub', psa: 'Mazmur', pro: 'Amsal',
+        ecc: 'Pengkhotbah', sng: 'Kidung Agung', isa: 'Yesaya', jer: 'Yeremia', lam: 'Ratapan',
+        ezk: 'Yehezkiel', dan: 'Daniel', hos: 'Hosea', jol: 'Yoel', amo: 'Amos', oba: 'Obaja',
+        jon: 'Yunus', mic: 'Mikha', nam: 'Nahum', hab: 'Habakuk', zep: 'Zefanya', hag: 'Hagai',
+        zec: 'Zakharia', mal: 'Maleakhi', mat: 'Matius', mrk: 'Markus', luk: 'Lukas', jhn: 'Yohanes',
+        act: 'Kisah Para Rasul', rom: 'Roma', '1co': '1 Korintus', '2co': '2 Korintus', gal: 'Galatia',
+        eph: 'Efesus', php: 'Filipi', col: 'Kolose', '1th': '1 Tesalonika', '2th': '2 Tesalonika',
+        '1ti': '1 Timotius', '2ti': '2 Timotius', tit: 'Titus', phm: 'Filemon', heb: 'Ibrani',
+        jas: 'Yakobus', '1pe': '1 Petrus', '2pe': '2 Petrus', '1jn': '1 Yohanes', '2jn': '2 Yohanes',
+        '3jn': '3 Yohanes', jud: 'Yudas', rev: 'Wahyu'
+      }
+      const indoName = bookMap[book.toLowerCase()] || book
+      try {
+        const beebleRes = await fetch(`https://beeble.vercel.app/api/v1/passage/${encodeURIComponent(indoName)}/${chapter}`)
+        if (beebleRes.ok) {
+          const json = await beebleRes.json()
+          const verses = (json?.data?.verses || [])
+            .filter((v: any) => v.type === 'content')
+            .map((v: any) => ({
+              book_id: book.toUpperCase(),
+              book_name: json?.data?.book?.name,
+              chapter: Number(chapter),
+              verse: v.verse,
+              text: v.content
+            }))
+          const payload: BibleChapter = {
+            reference: `${json?.data?.book?.name} ${chapter}`,
+            verses,
+            text: verses.map((v: any) => v.text).join(' '),
+            translation_id: 'tb',
+            translation_name: 'Terjemahan Baru (Indonesian)',
+            translation_note: 'Indonesian Bible via Beeble API'
+          }
+          setCache(cacheKey, payload)
+          return payload
+        }
+      } catch (beebleErr) {
+        console.warn('⚠️ Beeble direct also failed, falling back to English')
+      }
     }
 
     // Use bible-api.com for English and Portuguese (or fallback from Indonesian)
@@ -183,13 +279,67 @@ export async function getBibleChapter(book: string, chapter: number, language?: 
   }
 }
 
-export async function getBibleVerse(book: string, chapter: number, verse: number, language?: string): Promise<BibleVerse | null> {
+export function getCachedBibleVerse(book: string, chapter: number, verse: number, language?: string): BibleVerse | null {
+  const vKey = `${book.toLowerCase()}-${chapter}-${verse}-${language || 'en'}`;
+  if (verseCache.has(vKey)) return verseCache.get(vKey)!;
   try {
+    const raw = localStorage.getItem('bible_vs_v2_' + vKey);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data) {
+        verseCache.set(vKey, data);
+        return data;
+      }
+    }
+  } catch {}
+  const chData = getCachedBibleChapter(book, chapter, language);
+  if (chData && chData.verses) {
+    const found = chData.verses.find((v: any) => v.verse === verse);
+    if (found) {
+      const res: BibleVerse = {
+        book_name: found.book_name || chData.reference.split(' ')[0],
+        chapter: Number(found.chapter || chapter),
+        verse: Number(found.verse || verse),
+        text: found.text
+      };
+      verseCache.set(vKey, res);
+      return res;
+    }
+  }
+  return null;
+}
+
+export async function getBibleVerse(book: string, chapter: number, verse: number, language?: string): Promise<BibleVerse | null> {
+  const vKey = `${book.toLowerCase()}-${chapter}-${verse}-${language || 'en'}`;
+  const cached = getCachedBibleVerse(book, chapter, verse, language);
+  if (cached) return cached;
+
+  try {
+    if (language === 'id') {
+      const chapterData = await getBibleChapter(book, chapter, 'id')
+      if (chapterData && chapterData.verses && chapterData.verses.length > 0) {
+        const v = chapterData.verses.find((item: any) => item.verse === verse) || chapterData.verses[0]
+        const res: BibleVerse = {
+          book_name: v.book_name || chapterData.reference.split(' ')[0],
+          chapter: Number(v.chapter || chapter),
+          verse: Number(v.verse || verse),
+          text: v.text
+        }
+        verseCache.set(vKey, res);
+        try { localStorage.setItem('bible_vs_v2_' + vKey, JSON.stringify(res)); } catch {}
+        return res
+      }
+    }
     const translation = getTranslation(language)
     const response = await fetch(`${BIBLE_API_BASE}/${book}${chapter}:${verse}?translation=${translation}`)
     if (!response.ok) return null
     const data = await response.json()
-    return data.verses?.[0] || null
+    const result = data.verses?.[0] || null
+    if (result) {
+      verseCache.set(vKey, result);
+      try { localStorage.setItem('bible_vs_v2_' + vKey, JSON.stringify(result)); } catch {}
+    }
+    return result
   } catch (error) {
     console.error('Error fetching Bible verse:', error)
     return null
@@ -197,6 +347,20 @@ export async function getBibleVerse(book: string, chapter: number, verse: number
 }
 
 export async function searchBible(query: string, language?: string): Promise<any> {
+  const sKey = `${query.trim().toLowerCase()}_${language || 'en'}`;
+  if (searchCache.has(sKey)) {
+    return searchCache.get(sKey);
+  }
+  try {
+    const raw = sessionStorage.getItem('search_v2_' + sKey);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed) {
+        searchCache.set(sKey, parsed);
+        return parsed;
+      }
+    }
+  } catch {}
   try {
     const normalizedQuery = query.trim()
 
@@ -224,45 +388,71 @@ export async function searchBible(query: string, language?: string): Promise<any
       BIBLE_BOOKS.map(b => [b.name.toLowerCase(), b.abbr])
     )
 
-    // Normalize Indonesian queries to use abbreviations understood by API
-    const prepareQueryForApi = (q: string) => {
-      if (language !== 'id') return q
-      const qLower = q.toLowerCase()
-      // Try to match the longest Indonesian book name at the start
-      const idNames = Object.keys(ID_NAME_TO_ABBR).sort((a, b) => b.length - a.length)
-      for (const name of idNames) {
-        if (qLower.startsWith(name)) {
-          const abbr = ID_NAME_TO_ABBR[name]
-          return abbr + q.slice(name.length)
-        }
+    const cacheAndReturn = (res: any) => {
+      if (res) {
+        searchCache.set(sKey, res);
+        try { sessionStorage.setItem('search_v2_' + sKey, JSON.stringify(res)); } catch {}
       }
-      // Also support English names typed in Indonesian mode
-      const enNames = Object.keys(EN_NAME_TO_ABBR).sort((a, b) => b.length - a.length)
-      for (const name of enNames) {
-        if (qLower.startsWith(name)) {
-          const abbr = EN_NAME_TO_ABBR[name]
-          return abbr + q.slice(name.length)
-        }
-      }
-      return q
+      return res;
     }
+
+    // Special Indonesian reference check: e.g. "Yohanes 3:16" or "Mazmur 23"
+    if (language === 'id') {
+      const match = normalizedQuery.match(/^([0-9]?\s*[a-zA-Z\s]+?)\s+(\d+)(?::(\d+))?$/)
+      if (match) {
+        const bookNameRaw = match[1].trim().toLowerCase()
+        const chapterNum = parseInt(match[2], 10)
+        const verseNum = match[3] ? parseInt(match[3], 10) : null
+
+        const abbr = ID_NAME_TO_ABBR[bookNameRaw] || EN_NAME_TO_ABBR[bookNameRaw]
+        if (abbr) {
+          const chapterData = await getBibleChapter(abbr, chapterNum, 'id')
+          if (chapterData && chapterData.verses && chapterData.verses.length > 0) {
+            const matchingVerses = verseNum 
+              ? chapterData.verses.filter((v: any) => v.verse === verseNum)
+              : chapterData.verses
+
+            if (matchingVerses.length > 0) {
+              return cacheAndReturn({
+                ...chapterData,
+                reference: verseNum ? `${matchingVerses[0].book_name} ${chapterNum}:${verseNum}` : chapterData.reference,
+                verses: matchingVerses
+              })
+            }
+          }
+        }
+      }
+    }
+
+    const prepareQueryForApi = (q: string): string => {
+      let result = q.trim()
+      for (const [idName, abbr] of Object.entries(ID_NAME_TO_ABBR)) {
+        const regex = new RegExp(`^${idName}\\b`, 'i')
+        if (regex.test(result)) {
+          result = result.replace(regex, abbr)
+          break
+        }
+      }
+      return result
+    }
+
     const queryForApi = prepareQueryForApi(normalizedQuery)
     const translation = getTranslation(language)
 
-    // Strategy 1: Try direct verse reference (e.g., "John 3:16", "Genesis 1", "Psalm 23")
+    // Strategy 1: Try direct verse reference via bible-api.com
     try {
       const response = await fetch(`${BIBLE_API_BASE}/${encodeURIComponent(queryForApi)}?translation=${translation}`)
       if (response.ok) {
         const data = await response.json()
         if (data.verses && data.verses.length > 0) {
-          return data
+          return cacheAndReturn(data)
         }
       }
     } catch (e) {
       console.log('Not a verse reference, trying other strategies...')
     }
 
-    // Strategy 2: Check if it's a book name (e.g., "Revelation", "Genesis")
+    // Strategy 2: Check if it's a book name (e.g., "Revelation", "Genesis", "Kejadian")
     const lowerQ = normalizedQuery.toLowerCase()
     const bookMatch = BIBLE_BOOKS.find(book => {
       const idName = Object.entries(BOOK_NAME_ID).find(([abbr]) => abbr === book.abbr)?.[1]
@@ -272,16 +462,19 @@ export async function searchBible(query: string, language?: string): Promise<any
     })
 
     if (bookMatch) {
-      // Return first chapter of the book
+      if (language === 'id') {
+        const data = await getBibleChapter(bookMatch.abbr, 1, 'id')
+        if (data && data.verses) return cacheAndReturn(data)
+      }
       try {
         const response = await fetch(`${BIBLE_API_BASE}/${bookMatch.abbr}1?translation=${translation}`)
         if (response.ok) {
           const data = await response.json()
           if (data.verses && data.verses.length > 0) {
-            return {
+            return cacheAndReturn({
               ...data,
               reference: `${bookMatch.name} Chapter 1`
-            }
+            })
           }
         }
       } catch (e) {
@@ -289,59 +482,74 @@ export async function searchBible(query: string, language?: string): Promise<any
       }
     }
 
-    // Strategy 3: Keyword search in popular verses
-    const searchVerses = [
-      'John 3:16', 'John 3:16-17', 'Genesis 1:1', 'Genesis 1:1-3',
-      'Psalm 23:1-6', 'Psalm 91:1-16', 'Romans 8:28', 'Romans 8:28-39',
-      'Philippians 4:13', 'Philippians 4:4-13', 'Jeremiah 29:11',
-      'Proverbs 3:5-6', 'Matthew 28:19-20', 'John 14:6',
-      '1 Corinthians 13:4-8', '1 Corinthians 13:1-13',
-      'Isaiah 40:31', 'Psalm 119:105', 'Matthew 5:14-16',
-      'Romans 12:2', 'Ephesians 2:8-9', 'James 1:2-4',
-      'Proverbs 16:3', 'Psalm 46:1', 'Matthew 11:28-30',
-      'John 1:1-5', 'Revelation 21:4', 'Isaiah 41:10'
-    ]
-
-    console.log(`Searching for keyword: "${normalizedQuery}" in ${searchVerses.length} verses...`)
-
-    const results = await Promise.all(
-      searchVerses.map(async (ref) => {
-        try {
-          const res = await fetch(`${BIBLE_API_BASE}/${encodeURIComponent(ref)}?translation=${translation}`)
-          if (res.ok) {
-            const data = await res.json()
-            if (data.verses) {
-              // Check if any verse contains the query (case insensitive)
-              const matchingVerses = data.verses.filter((v: any) =>
-                v.text.toLowerCase().includes(normalizedQuery.toLowerCase()) ||
-                v.book_name.toLowerCase().includes(normalizedQuery.toLowerCase())
-              )
-
-              if (matchingVerses.length > 0) {
-                return {
-                  ...data,
-                  verses: matchingVerses
+    // Strategy 3: Keyword search in popular passages
+    if (language === 'id') {
+      const popularPassages = [
+        { abbr: 'jhn', chapter: 3 },
+        { abbr: 'psa', chapter: 23 },
+        { abbr: 'rom', chapter: 8 },
+        { abbr: 'php', chapter: 4 },
+        { abbr: 'gen', chapter: 1 },
+        { abbr: 'isa', chapter: 41 }
+      ]
+      const results = await Promise.all(
+        popularPassages.map(async (p) => {
+          const data = await getBibleChapter(p.abbr, p.chapter, 'id')
+          if (data && data.verses) {
+            const matches = data.verses.filter((v: any) =>
+              v.text.toLowerCase().includes(lowerQ) ||
+              (v.book_name && v.book_name.toLowerCase().includes(lowerQ))
+            )
+            return matches.length > 0 ? { ...data, verses: matches } : null
+          }
+          return null
+        })
+      )
+      const valid = results.filter(Boolean) as any[]
+      if (valid.length > 0) {
+        const allVerses = valid.flatMap(r => r.verses)
+        return cacheAndReturn({
+          verses: allVerses,
+          text: allVerses.map((v: any) => v.text).join(' '),
+          reference: `Hasil pencarian untuk "${normalizedQuery}"`
+        })
+      }
+    } else {
+      const searchVerses = [
+        'John 3:16', 'Genesis 1:1', 'Psalm 23:1', 'Romans 8:28',
+        'Philippians 4:13', 'Jeremiah 29:11', 'Proverbs 3:5-6',
+        '1 Corinthians 13:4-8', 'Isaiah 40:31', 'Psalm 119:105'
+      ]
+      const results = await Promise.all(
+        searchVerses.map(async (ref) => {
+          try {
+            const res = await fetch(`${BIBLE_API_BASE}/${encodeURIComponent(ref)}?translation=${translation}`)
+            if (res.ok) {
+              const data = await res.json()
+              if (data.verses) {
+                const matchingVerses = data.verses.filter((v: any) =>
+                  v.text.toLowerCase().includes(lowerQ) ||
+                  v.book_name.toLowerCase().includes(lowerQ)
+                )
+                if (matchingVerses.length > 0) {
+                  return { ...data, verses: matchingVerses }
                 }
               }
             }
+          } catch (e) {
+            return null
           }
-        } catch (e) {
           return null
-        }
-        return null
-      })
-    )
-
-    const validResults = results.filter(r => r !== null)
-
-    if (validResults.length > 0) {
-      const allVerses = validResults.flatMap(r => r.verses)
-      console.log(`Found ${allVerses.length} matching verses`)
-
-      return {
-        verses: allVerses,
-        text: allVerses.map((v: any) => v.text).join(' '),
-        reference: `Search results for "${normalizedQuery}"`
+        })
+      )
+      const validResults = results.filter(Boolean) as any[]
+      if (validResults.length > 0) {
+        const allVerses = validResults.flatMap(r => r.verses)
+        return cacheAndReturn({
+          verses: allVerses,
+          text: allVerses.map((v: any) => v.text).join(' '),
+          reference: `Search results for "${normalizedQuery}"`
+        })
       }
     }
 
