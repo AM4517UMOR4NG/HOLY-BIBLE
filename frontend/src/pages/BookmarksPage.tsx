@@ -1,138 +1,117 @@
-import { Bookmark, Trash2, BookOpen, Calendar, Heart } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Bookmark, Trash2, BookOpen, BookMarked, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface BookmarkItem {
-  id: number
-  book: string
-  chapter: number
-  verse: number
-  text: string
-  note?: string
-  createdAt: string
-}
-
-// Mock bookmarks
-const mockBookmarks: BookmarkItem[] = [
-  {
-    id: 1,
-    book: "John",
-    chapter: 3,
-    verse: 16,
-    text: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
-    note: "My favorite verse",
-    createdAt: "2025-11-06"
-  },
-  {
-    id: 2,
-    book: "Psalm",
-    chapter: 23,
-    verse: 1,
-    text: "The LORD is my shepherd; I shall not want.",
-    createdAt: "2025-11-05"
-  },
-  {
-    id: 3,
-    book: "Genesis",
-    chapter: 1,
-    verse: 1,
-    text: "In the beginning God created the heaven and the earth.",
-    note: "The beginning of everything",
-    createdAt: "2025-11-04"
-  },
-]
+import { getBookmarks, removeBookmark, BookmarkItem } from '@/lib/bookmarks'
+import { useTranslation } from 'react-i18next'
 
 export function BookmarksPage() {
-  return (
-    <div className="max-w-6xl mx-auto space-y-8">
-      {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 md:p-12 text-white shadow-2xl">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
-        
-        <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
-              <Bookmark className="h-8 w-8" />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold">My Bookmarks</h1>
-              <p className="text-blue-100 text-sm md:text-base mt-1">
-                {mockBookmarks.length} saved verse{mockBookmarks.length !== 1 ? 's' : ''} for reflection and study
-              </p>
-            </div>
-          </div>
+  const { t } = useTranslation()
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>(getBookmarks)
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mt-6 max-w-2xl">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold">{mockBookmarks.length}</div>
-              <div className="text-xs text-blue-100">Saved</div>
+  useEffect(() => {
+    setBookmarks(getBookmarks())
+    const handleUpdate = () => setBookmarks(getBookmarks())
+    window.addEventListener('bookmarks_updated', handleUpdate)
+    return () => window.removeEventListener('bookmarks_updated', handleUpdate)
+  }, [])
+
+  const handleRead = (bookmark: BookmarkItem) => {
+    localStorage.setItem('current_reading', JSON.stringify({
+      book: bookmark.bookAbbr || bookmark.book,
+      chapter: bookmark.chapter,
+      verse: bookmark.verse
+    }))
+    window.history.pushState({}, '', '/')
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
+
+  const handleDelete = (id: string) => {
+    removeBookmark(id)
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="pt-8 md:pt-12 pb-4 flex flex-col items-center text-center max-w-3xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-slate-900 dark:text-white tracking-tight">
+          {t('nav.bookmarks') || 'My Bookmarks'}
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg font-medium max-w-xl mx-auto mb-12">
+          Koleksi ayat-ayat favorit dan catatan pribadi Anda.
+        </p>
+
+        {/* Minimalist Stats */}
+        {bookmarks.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+            <div className="flex flex-col items-center">
+              <span className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter mb-1">{bookmarks.length}</span>
+              <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tersimpan</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold">{new Set(mockBookmarks.map(b => b.book)).size}</div>
-              <div className="text-xs text-blue-100">Books</div>
+            <div className="w-px h-12 bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter mb-1">{new Set(bookmarks.map(b => b.book)).size}</span>
+              <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kitab</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold">{mockBookmarks.filter(b => b.note).length}</div>
-              <div className="text-xs text-blue-100">Notes</div>
+            <div className="w-px h-12 bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter mb-1">{bookmarks.filter(b => b.note).length}</span>
+              <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Catatan</span>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {mockBookmarks.length > 0 ? (
-        <div className="space-y-4">
-          {mockBookmarks.map((bookmark) => (
+      {bookmarks.length > 0 ? (
+        <div className="space-y-4 pb-12">
+          {bookmarks.map((bookmark) => (
             <div 
-              key={bookmark.id} 
-              className="group bg-[#1e293b] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-blue-500"
+              key={bookmark.id}
+              className="group p-4 sm:p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors relative border border-black dark:border-slate-700"
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="p-2 bg-blue-600/20 rounded-lg shrink-0">
-                    <BookOpen className="h-5 w-5 text-blue-400" />
+                  <div className="pt-1 hidden sm:block">
+                    <Bookmark className="h-5 w-5 text-slate-300 dark:text-slate-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-1">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight mb-1">
                       {bookmark.book} {bookmark.chapter}:{bookmark.verse}
                     </h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <Calendar className="h-4 w-4" />
-                      <span>Saved on {new Date(bookmark.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                    </div>
+                    <p className="text-sm font-medium text-slate-400 dark:text-slate-500">
+                      Tersimpan pada {new Date(bookmark.createdAt).toLocaleDateString('id-ID', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <Button 
                     variant="ghost" 
-                    size="sm"
-                    className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/30"
+                    className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white font-semibold transition-colors"
+                    onClick={() => handleRead(bookmark)}
                   >
-                    Read →
+                    Baca
+                    <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="icon"
-                    className="text-red-400 hover:text-red-300 hover:bg-red-900/30"
+                    className="text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors shrink-0"
+                    onClick={() => handleDelete(bookmark.id)}
+                    aria-label="Hapus markah"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
-              <p className="text-base leading-relaxed text-gray-200 mb-4 pl-14">
-                {bookmark.text}
-              </p>
+              <blockquote className="text-xl md:text-2xl font-serif leading-relaxed text-slate-800 dark:text-slate-200 pl-0 sm:pl-9">
+                "{bookmark.text}"
+              </blockquote>
 
               {bookmark.note && (
-                <div className="pl-14">
-                  <div className="flex items-start gap-2 p-4 bg-[#0f172a] rounded-xl border border-gray-700">
-                    <Heart className="h-4 w-4 text-pink-400 shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-300 mb-1">Personal Note:</p>
-                      <p className="text-sm text-gray-400 italic">"{bookmark.note}"</p>
-                    </div>
+                <div className="mt-4 sm:pl-9">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border-l-4 border-slate-300 dark:border-slate-700">
+                    <p className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wider">Catatan Pribadi</p>
+                    <p className="text-base text-slate-700 dark:text-slate-300">{bookmark.note}</p>
                   </div>
                 </div>
               )}
@@ -140,27 +119,23 @@ export function BookmarksPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-[#1e293b] rounded-3xl p-12 border border-gray-700 shadow-xl">
-          <div className="text-center max-w-md mx-auto">
-            <div className="inline-flex p-4 bg-blue-500/10 rounded-2xl mb-6">
-              <Bookmark className="h-16 w-16 text-blue-500" />
-            </div>
-            <h3 className="text-3xl font-bold mb-3 text-white">No Bookmarks Yet</h3>
-            <p className="text-gray-400 mb-8 text-lg">
-              Start reading and save verses that inspire you for easy access later
-            </p>
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
-              onClick={() => {
-                window.history.pushState({}, '', '/')
-                window.dispatchEvent(new PopStateEvent('popstate'))
-              }}
-            >
-              <BookOpen className="h-5 w-5 mr-2" />
-              Start Reading
-            </Button>
-          </div>
+        <div className="text-center text-slate-500 dark:text-slate-400 py-20 bg-slate-50 dark:bg-slate-900/30 border border-slate-200 border-dashed dark:border-slate-800 rounded-[2rem]">
+          <BookMarked className="h-16 w-16 mx-auto mb-6 text-slate-300 dark:text-slate-700" />
+          <h3 className="text-2xl font-black mb-3 text-slate-900 dark:text-white tracking-tight">Belum Ada Markah</h3>
+          <p className="text-lg font-medium opacity-70 mb-8 max-w-sm mx-auto">
+            Mulai membaca dan tandai ayat-ayat yang menginspirasi Anda.
+          </p>
+          <Button 
+            size="lg"
+            className="h-14 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-white font-bold shadow-lg shadow-black/10 dark:shadow-white/10 transition-all active:scale-95 gap-2"
+            onClick={() => {
+              window.history.pushState({}, '', '/')
+              window.dispatchEvent(new PopStateEvent('popstate'))
+            }}
+          >
+            <BookOpen className="h-5 w-5" />
+            Mulai Membaca
+          </Button>
         </div>
       )}
     </div>
