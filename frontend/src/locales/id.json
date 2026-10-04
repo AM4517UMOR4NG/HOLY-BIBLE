@@ -12,7 +12,12 @@
     "darkMode": "Mode Gelap",
     "lightMode": "Mode Terang",
     "language": "Bahasa",
-    "loginToAccess": "Masuk untuk akses Markah"
+    "loginToAccess": "Masuk untuk akses Markah",
+    "menu": "Menu",
+    "dailyVerse": "Ayat Harian",
+    "prayer": "Doa",
+    "notes": "Catatan",
+    "readingPlan": "Rencana Baca"
   },
   "auth": {
     "welcomeBack": "Selamat datang kembali!",
