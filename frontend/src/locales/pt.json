@@ -12,7 +12,12 @@
     "darkMode": "Modo Escuro",
     "lightMode": "Modo Claro",
     "language": "Idioma",
-    "loginToAccess": "Entre para acessar os Marcadores"
+    "loginToAccess": "Entre para acessar os Marcadores",
+    "menu": "Menu",
+    "dailyVerse": "Versículo Diário",
+    "prayer": "Oração",
+    "notes": "Notas",
+    "readingPlan": "Plano de Leitura"
   },
   "auth": {
     "welcomeBack": "Bem-vindo de volta!",
