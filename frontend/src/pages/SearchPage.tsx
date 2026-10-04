@@ -1,3 +1,4 @@
+// SearchPage: Fast Bible search with instant session cache and responsive layout
 import { useState } from 'react'
 import { Search, Loader2, TrendingUp, ArrowRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
