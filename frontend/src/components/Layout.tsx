@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Book, Moon, Sun, Menu, X, User, LogOut, Bookmark, Globe, Calendar, FileText, ListChecks, Search, MessageSquare } from 'lucide-react'
+import { BookOpen, Moon, Sun, Menu, X, User, LogOut, Bookmark, Globe, Calendar, FileText, ListChecks, Search, MessageSquare } from 'lucide-react'
 import { Button } from './ui/button'
 import { useAuth } from '@/contexts/AuthContext'
 import { AvatarPickerModal } from '@/components/AvatarPickerModal'
@@ -58,17 +58,17 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 transition-colors">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-[#0f172a]/95 backdrop-blur supports-backdrop-filter:bg-[#0f172a]/90">
+      <header className="sticky top-0 z-[100] w-full border-b border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur supports-backdrop-filter:bg-white/90 dark:supports-backdrop-filter:bg-[#0f172a]/90 transition-colors">
         <div className="container flex h-16 items-center justify-between px-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={() => handleNavClick('/')}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <Book className="h-6 w-6 text-blue-400" />
-              <span className="text-xl font-bold text-white">{t('app.title')}</span>
+              <BookOpen className="h-6 w-6 text-blue-500" />
+              <span className="text-xl font-bold text-gray-900 dark:text-white">{t('app.title')}</span>
             </button>
           </div>
 
@@ -81,43 +81,43 @@ export function Layout({ children }: LayoutProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowTopMenu(!showTopMenu)}
-                className="hover:bg-gray-800 text-gray-300"
+                className="hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
               >
                 <Menu className="h-4 w-4 mr-2" />{t('nav.menu') || 'Menu'}
               </Button>
               {showTopMenu && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShowTopMenu(false)} />
-                  <div className="absolute right-0 mt-2 w-56 bg-[#1e293b] border border-gray-700 rounded-lg shadow-xl z-50 py-2">
+                  <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl shadow-black/5 dark:shadow-black/40 z-50 p-2">
                     <button
                       onClick={() => { setShowTopMenu(false); handleNavClick('/') }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2"
+                      className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all"
                     >
-                      <Book className="h-4 w-4" /> {t('nav.read')}
+                      <BookOpen className="h-4 w-4 text-slate-400" /> {t('nav.read')}
                     </button>
                     <button
                       onClick={() => { setShowTopMenu(false); handleNavClick('/search') }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2"
+                      className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all"
                     >
-                      <Search className="h-4 w-4" /> {t('nav.search')}
+                      <Search className="h-4 w-4 text-slate-400" /> {t('nav.search')}
                     </button>
                     {isAuthenticated && (
                       <>
-                        <div className="border-t border-gray-700 my-2" />
-                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/bookmarks') }} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2">
-                          <Bookmark className="h-4 w-4" /> {t('nav.bookmarks')}
+                        <div className="border-t border-slate-100 dark:border-slate-800/60 my-1 mx-2" />
+                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/bookmarks') }} className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all">
+                          <Bookmark className="h-4 w-4 text-slate-400" /> {t('nav.bookmarks')}
                         </button>
-                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/daily-verse') }} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2">
-                          <Calendar className="h-4 w-4" /> {t('nav.dailyVerse') || 'Daily Verse'}
+                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/daily-verse') }} className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all">
+                          <Calendar className="h-4 w-4 text-slate-400" /> {t('nav.dailyVerse') || 'Daily Verse'}
                         </button>
-                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/prayer') }} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4" /> {t('nav.prayer') || 'Prayer'}
+                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/prayer') }} className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all">
+                          <MessageSquare className="h-4 w-4 text-slate-400" /> {t('nav.prayer') || 'Prayer'}
                         </button>
-                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/notes') }} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2">
-                          <FileText className="h-4 w-4" /> {t('nav.notes') || 'Notes'}
+                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/notes') }} className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all">
+                          <FileText className="h-4 w-4 text-slate-400" /> {t('nav.notes') || 'Notes'}
                         </button>
-                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/plan') }} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white flex items-center gap-2">
-                          <ListChecks className="h-4 w-4" /> {t('nav.readingPlan') || 'Reading Plan'}
+                        <button onClick={() => { setShowTopMenu(false); handleNavClick('/plan') }} className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white flex items-center gap-3 rounded-xl transition-all">
+                          <ListChecks className="h-4 w-4 text-slate-400" /> {t('nav.readingPlan') || 'Reading Plan'}
                         </button>
                       </>
                     )}
@@ -132,18 +132,18 @@ export function Layout({ children }: LayoutProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                className="hover:bg-gray-800 text-gray-300"
+                className="hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
               >
                 <Globe className="h-5 w-5" />
               </Button>
-              
+
               {showLanguageMenu && (
                 <>
-                  <div 
+                  <div
                     className="fixed inset-0 z-40"
                     onClick={() => setShowLanguageMenu(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-40 bg-[#1e293b] border border-gray-700 rounded-lg shadow-xl z-50 py-2">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl shadow-black/5 dark:shadow-black/40 z-50 p-2">
                     {availableLanguages.map((lang) => (
                       <button
                         key={lang.code}
@@ -151,11 +151,10 @@ export function Layout({ children }: LayoutProps) {
                           setLanguage(lang.code)
                           setShowLanguageMenu(false)
                         }}
-                        className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
-                          language === lang.code
-                            ? 'bg-blue-600/20 text-blue-400'
-                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                        }`}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-xl transition-all ${language === lang.code
+                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-bold'
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium'
+                          }`}
                       >
                         <span className="text-lg">{lang.flag}</span>
                         <span>{lang.name}</span>
@@ -165,11 +164,11 @@ export function Layout({ children }: LayoutProps) {
                 </>
               )}
             </div>
-            
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="hover:bg-gray-800 text-gray-300 hidden sm:flex">
+
+            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 hidden sm:flex">
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            
+
             {/* Auth Button - Login or User Menu */}
             {isAuthenticated ? (
               <div className="relative hidden sm:block">
@@ -177,32 +176,32 @@ export function Layout({ children }: LayoutProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-2 hover:bg-gray-800 text-white"
+                  className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
                 >
-                  <span className="h-8 w-8 rounded-full bg-blue-600/30 border border-blue-500/30 overflow-hidden grid place-items-center">
+                  <span className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-600/30 border border-blue-200 dark:border-blue-500/30 overflow-hidden grid place-items-center">
                     {(user as any)?.avatarUrl || (user as any)?.photoURL ? (
                       <img src={(user as any).avatarUrl || (user as any).photoURL} alt="avatar" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="text-xs font-semibold text-blue-200">
+                      <span className="text-xs font-semibold text-blue-700 dark:text-blue-200">
                         {getInitials(user?.name, user?.email)}
                       </span>
                     )}
                   </span>
                   <span className="max-w-[140px] truncate">{user?.name || user?.email}</span>
                 </Button>
-                
+
                 {/* User Dropdown Menu */}
                 {showUserMenu && (
                   <>
-                    <div 
+                    <div
                       className="fixed inset-0 z-40"
                       onClick={() => setShowUserMenu(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-56 bg-[#1e293b] border border-gray-700 rounded-lg shadow-xl z-50 py-2">
-                      <div className="px-4 py-3 border-b border-gray-700">
-                        <p className="text-sm font-medium text-white">{user?.name}</p>
-                        <p className="text-xs text-gray-400 truncate">{user?.email}</p>
-                        <span className="inline-block mt-1 px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded">
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl shadow-black/5 dark:shadow-black/40 z-50 p-2">
+                      <div className="px-3 py-3 mb-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800/50">
+                        <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{user?.name}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate mb-2">{user?.email}</p>
+                        <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-md">
                           {user?.role}
                         </span>
                       </div>
@@ -211,16 +210,16 @@ export function Layout({ children }: LayoutProps) {
                           setShowUserMenu(false)
                           setShowAvatarPicker(true)
                         }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 rounded-xl transition-all"
                       >
-                        🖼️ Change Avatar
+                        <User className="h-4 w-4" /> Change Avatar
                       </button>
                       <button
                         onClick={() => {
                           setShowUserMenu(false)
                           logout()
                         }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all mt-1"
                       >
                         <LogOut className="h-4 w-4" />
                         {t('nav.logout')}
@@ -230,8 +229,8 @@ export function Layout({ children }: LayoutProps) {
                 )}
               </div>
             ) : (
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 size="sm"
                 onClick={() => handleNavClick('/auth')}
                 className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white font-medium"
@@ -239,13 +238,13 @@ export function Layout({ children }: LayoutProps) {
                 {t('nav.login')}
               </Button>
             )}
-            
+
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden hover:bg-gray-800 text-gray-300"
+              className="md:hidden hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -267,31 +266,31 @@ export function Layout({ children }: LayoutProps) {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           {/* Backdrop */}
-          <div 
+          <div
             className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
-          
+
           {/* Dropdown Menu */}
-          <div className="fixed top-16 left-0 right-0 bg-[#0f172a] border-b border-gray-800 shadow-2xl animate-in slide-in-from-top duration-200">
+          <div className="fixed top-16 left-0 right-0 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-800 shadow-2xl animate-in slide-in-from-top duration-200">
             <nav className="container mx-auto px-6 py-4 space-y-1">
               {/* User Info - Show if authenticated */}
               {isAuthenticated && user && (
                 <>
-                  <div className="px-4 py-3 bg-gray-800/50 rounded-lg mb-2">
+                  <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-transparent rounded-lg mb-2">
                     <div className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-full bg-blue-600/30 border border-blue-500/30 overflow-hidden grid place-items-center">
+                      <span className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-600/30 border border-blue-200 dark:border-blue-500/30 overflow-hidden grid place-items-center">
                         {(user as any)?.avatarUrl || (user as any)?.photoURL ? (
                           <img src={(user as any).avatarUrl || (user as any).photoURL} alt="avatar" className="h-full w-full object-cover" />
                         ) : (
-                          <span className="text-xs font-semibold text-blue-200">
+                          <span className="text-xs font-semibold text-blue-700 dark:text-blue-200">
                             {getInitials(user?.name, user?.email)}
                           </span>
                         )}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate">{user.name}</p>
-                        <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                       </div>
                       <button
                         onClick={() => {
@@ -302,38 +301,38 @@ export function Layout({ children }: LayoutProps) {
                         Ganti Avatar
                       </button>
                     </div>
-                    <span className="inline-block mt-2 px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded">
+                    <span className="inline-block mt-2 px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded">
                       {user.role}
                     </span>
                   </div>
-                  <div className="border-t border-gray-800 my-2"></div>
+                  <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
                 </>
               )}
-              
+
               <button
                 onClick={() => handleNavClick('/')}
-                className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors"
               >
                 📖 {t('nav.read')}
               </button>
               <button
                 onClick={() => handleNavClick('/search')}
-                className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors"
               >
                 🔍 {t('nav.search')}
               </button>
-              
+
               {/* Bookmarks - Only for logged in users */}
               {isAuthenticated ? (
                 <button
                   onClick={() => handleNavClick('/bookmarks')}
-                  className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
+                  className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
                 >
                   <Bookmark className="h-5 w-5" />
                   {t('nav.bookmarks')}
                 </button>
               ) : (
-                <div className="px-4 py-3 text-sm text-gray-500 bg-gray-800/30 rounded-lg flex items-center gap-2">
+                <div className="px-4 py-3 text-sm text-gray-500 bg-gray-100 dark:bg-gray-800/30 rounded-lg flex items-center gap-2">
                   <Bookmark className="h-4 w-4" />
                   <span>{t('nav.loginToAccess')}</span>
                 </div>
@@ -344,37 +343,37 @@ export function Layout({ children }: LayoutProps) {
                 <>
                   <button
                     onClick={() => handleNavClick('/daily-verse')}
-                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
+                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
                   >
                     <Calendar className="h-5 w-5" />
                     {t('nav.dailyVerse') || 'Daily Verse'}
                   </button>
                   <button
                     onClick={() => handleNavClick('/prayer')}
-                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
+                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
                   >
                     <MessageSquare className="h-5 w-5" />
                     {t('nav.prayer') || 'Prayer'}
                   </button>
                   <button
                     onClick={() => handleNavClick('/notes')}
-                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
+                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
                   >
                     <FileText className="h-5 w-5" />
                     {t('nav.notes') || 'Notes'}
                   </button>
                   <button
                     onClick={() => handleNavClick('/plan')}
-                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
+                    className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
                   >
                     <ListChecks className="h-5 w-5" />
                     {t('nav.readingPlan') || 'Reading Plan'}
                   </button>
                 </>
               )}
-              
+
               <div className="border-t border-gray-800 my-2"></div>
-              
+
               <button
                 onClick={toggleDarkMode}
                 className="w-full text-left px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors flex items-center gap-3"
@@ -382,7 +381,7 @@ export function Layout({ children }: LayoutProps) {
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                 {darkMode ? t('nav.lightMode') : t('nav.darkMode')}
               </button>
-              
+
               {/* Language Selector in Mobile Menu */}
               <div className="px-4 py-3 text-sm font-medium text-gray-400">
                 🌐 {t('nav.language') || 'Language'}
@@ -392,18 +391,17 @@ export function Layout({ children }: LayoutProps) {
                   <button
                     key={lang.code}
                     onClick={() => setLanguage(lang.code)}
-                    className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      language === lang.code
+                    className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors ${language === lang.code
                         ? 'bg-blue-600/20 text-blue-400'
                         : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
-                    }`}
+                      }`}
                   >
                     <span className="text-base mr-2">{lang.flag}</span>
                     {lang.name}
                   </button>
                 ))}
               </div>
-              
+
               {/* Login or Logout Button */}
               {isAuthenticated ? (
                 <button
@@ -432,7 +430,7 @@ export function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-8 max-w-7xl relative z-0">
         {children}
       </main>
     </div>
