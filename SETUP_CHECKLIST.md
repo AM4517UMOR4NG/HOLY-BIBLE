@@ -1,8 +1,8 @@
-# ✅ Setup Checklist - HOLY BIBLE
+# Setup Checklist - HOLY BIBLE
 
 Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 
-## 📋 Pre-Installation Checklist
+## Pre-Installation Checklist
 
 - [ ] Node.js 20+ terinstall
   ```bash
@@ -26,11 +26,11 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
   git --version
   ```
 
-## 📦 Installation Checklist
+## Installation Checklist
 
 - [ ] Repository sudah di-clone
   ```bash
-  git clone https://github.com/yourusername/HOLY_BIBLE.git
+  git clone [https://github.com/yourusername/HOLY_BIBLE.git](https://github.com/yourusername/HOLY_BIBLE.git)
   cd HOLY_BIBLE
   ```
 - [ ] Dependencies backend terinstall
@@ -44,7 +44,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
   cd ..
   ```
 
-## ⚙️ Configuration Checklist
+## Configuration Checklist
 
 ### Environment Variables
 
@@ -64,7 +64,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] `PORT` sudah di-set (default: 4000)
 - [ ] `VITE_API_URL` di frontend sudah di-set
 
-## 🐳 Docker Services Checklist
+## Docker Services Checklist
 
 - [ ] PostgreSQL container running
   ```bash
@@ -88,7 +88,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
   - [ ] Meilisearch: `http://localhost:7700`
   - [ ] MinIO: `http://localhost:9000`
 
-## 🗄️ Database Checklist
+## Database Checklist
 
 - [ ] Prisma Client sudah di-generate
   ```bash
@@ -109,7 +109,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
   # Tidak ada error database connection
   ```
 
-## 🚀 Application Checklist
+## Application Checklist
 
 ### Backend
 
@@ -143,7 +143,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] Frontend bisa connect ke backend API
 - [ ] Tidak ada error di browser console
 
-## 🔐 Authentication Checklist
+## Authentication Checklist
 
 - [ ] Register endpoint berfungsi
   ```bash
@@ -160,7 +160,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] JWT token diterima setelah login
 - [ ] Protected routes memerlukan authentication
 
-## 📖 Features Checklist
+## Features Checklist
 
 - [ ] Bible Reader page bisa diakses
 - [ ] Search functionality berfungsi
@@ -170,7 +170,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] Dark mode toggle berfungsi
 - [ ] Responsive design bekerja di mobile
 
-## 🔍 Search & Indexing Checklist
+## Search & Indexing Checklist
 
 - [ ] Meilisearch index sudah dibuat
 - [ ] Verses sudah ter-index
@@ -180,13 +180,13 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
   ```
 - [ ] Search results relevan
 
-## 📦 File Upload Checklist (Optional)
+## File Upload Checklist (Optional)
 
 - [ ] MinIO/S3 connection berhasil
 - [ ] Upload endpoint accessible (admin only)
 - [ ] Files bisa di-upload dan di-download
 
-## 🧪 Testing Checklist
+## Testing Checklist
 
 - [ ] Tidak ada linter errors
   ```bash
@@ -199,7 +199,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] Tidak ada error di console (backend & frontend)
 - [ ] API endpoints return expected responses
 
-## 🚢 Production Readiness Checklist
+## Production Readiness Checklist
 
 - [ ] Environment variables untuk production sudah di-set
 - [ ] `JWT_PRIVATE_KEY` menggunakan random secure string
@@ -211,7 +211,7 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 - [ ] Security headers sudah di-set
 - [ ] Rate limiting sudah di-implement (jika perlu)
 
-## ✅ Final Verification
+## Final Verification
 
 - [ ] Semua checklist di atas sudah dicentang
 - [ ] Aplikasi berjalan tanpa error
@@ -220,16 +220,13 @@ Checklist untuk memastikan setup aplikasi HOLY BIBLE sudah benar dan lengkap.
 
 ---
 
-## 🎉 Setup Complete!
+## Setup Complete!
 
 Jika semua checklist sudah dicentang, selamat! Setup Anda sudah lengkap dan siap digunakan.
 
 ### Next Steps:
-1. 📖 Baca [Quick Start Guide](./QUICK_START.md) untuk mulai menggunakan
-2. 🛠️ Lihat [Command Reference](./COMMANDS.md) untuk command yang sering digunakan
-3. 📚 Baca [Panduan Lengkap](./PANDUAN_MENJALANKAN.md) untuk detail lebih lanjut
+1. Baca [Quick Start Guide](./QUICK_START.md) untuk mulai menggunakan
+2. Lihat [Command Reference](./COMMANDS.md) untuk command yang sering digunakan
+3. Baca [Panduan Lengkap](./PANDUAN_MENJALANKAN.md) untuk detail lebih lanjut
 
 ---
-
-**Happy Coding! 🚀**
-
