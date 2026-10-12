@@ -1,18 +1,18 @@
-# ⚡ Quick Start Guide - 5 Menit
+# Quick Start Guide - 5 Menit
 
 Panduan cepat untuk menjalankan HOLY BIBLE dalam 5 menit!
 
-## 🎯 Prasyarat
+## Prasyarat
 
-- ✅ Node.js 20+ terinstall
-- ✅ Docker & Docker Compose terinstall
-- ✅ Git terinstall
+- Node.js 20+ terinstall
+- Docker & Docker Compose terinstall
+- Git terinstall
 
-## 🚀 Langkah Cepat
+## Langkah Cepat
 
 ### 1. Clone & Masuk ke Direktori
 ```bash
-git clone https://github.com/yourusername/HOLY_BIBLE.git
+git clone [https://github.com/yourusername/HOLY_BIBLE.git](https://github.com/yourusername/HOLY_BIBLE.git)
 cd HOLY_BIBLE
 ```
 
@@ -29,10 +29,10 @@ docker compose up -d
 ```
 
 Tunggu beberapa detik hingga semua services siap:
-- ✅ PostgreSQL (port 5432)
-- ✅ Redis (port 6379)
-- ✅ Meilisearch (port 7700)
-- ✅ MinIO (port 9000)
+- PostgreSQL (port 5432)
+- Redis (port 6379)
+- Meilisearch (port 7700)
+- MinIO (port 9000)
 
 ### 4. Install Dependencies
 ```bash
@@ -72,28 +72,28 @@ npm run dev
 ```
 Frontend akan berjalan di `http://localhost:5173`
 
-## ✅ Selesai!
+## Selesai!
 
 Buka browser dan akses:
-- 🌐 **Frontend**: http://localhost:5173
-- 📚 **API Docs**: http://localhost:4000/docs
-- 🔍 **Meilisearch**: http://localhost:7700
-- 📦 **MinIO**: http://localhost:9000
+- **Frontend**: http://localhost:5173
+- **API Docs**: http://localhost:4000/docs
+- **Meilisearch**: http://localhost:7700
+- **MinIO**: http://localhost:9000
 
-## 🎉 Fitur yang Bisa Dicoba
+## Fitur yang Bisa Dicoba
 
 1. **Baca Alkitab** - Navigasi ke halaman Read
 2. **Cari Ayat** - Gunakan fitur Search
 3. **Register/Login** - Buat akun untuk akses fitur lengkap
 4. **Bookmarks** - Simpan ayat favorit (perlu login)
 
-## 🆘 Troubleshooting Cepat
+## Troubleshooting Cepat
 
 ### Port sudah digunakan?
 ```bash
 # Cek port yang digunakan
 netstat -ano | findstr :4000  # Windows
-lsof -i :4000                  # Mac/Linux
+lsof -i :4000                 # Mac/Linux
 ```
 
 ### Docker services tidak start?
@@ -112,13 +112,12 @@ npm run prisma:migrate reset
 npm run prisma:migrate
 ```
 
-## 📚 Next Steps
+## Next Steps
 
-- 📖 Baca [Panduan Lengkap](./PANDUAN_MENJALANKAN.md) untuk detail lebih lanjut
-- ✅ Cek [Setup Checklist](./SETUP_CHECKLIST.md) untuk memastikan semua benar
-- 🛠️ Lihat [Command Reference](./COMMANDS.md) untuk command yang sering digunakan
+- Baca [Panduan Lengkap](./PANDUAN_MENJALANKAN.md) untuk detail lebih lanjut
+- Cek [Setup Checklist](./SETUP_CHECKLIST.md) untuk memastikan semua benar
+- Lihat [Command Reference](./COMMANDS.md) untuk command yang sering digunakan
 
 ---
 
-**Selamat! Anda siap untuk mulai menggunakan HOLY BIBLE! 🎉**
-
+**Selamat! Anda siap untuk mulai menggunakan HOLY BIBLE!**
