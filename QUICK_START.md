@@ -119,5 +119,3 @@ npm run prisma:migrate
 - Lihat [Command Reference](./COMMANDS.md) untuk command yang sering digunakan
 
 ---
-
-**Selamat! Anda siap untuk mulai menggunakan HOLY BIBLE!**
