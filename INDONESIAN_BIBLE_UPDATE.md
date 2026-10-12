@@ -6,12 +6,12 @@ The Indonesian Bible feature has been updated to work **without requiring the ba
 
 ## What Changed?
 
-### Before ❌
+### Before 
 - Frontend → Backend Proxy → Beeble API
 - Required backend server to be running
 - Added latency through extra hop
 
-### After ✅
+### After 
 - Frontend → Beeble API (direct)
 - **No backend required** for Indonesian Bible
 - Faster response times
@@ -49,7 +49,7 @@ cd frontend
 npm run dev
 ```
 
-The Indonesian Bible will work perfectly! ✅
+The Indonesian Bible will work perfectly! 
 
 ### Full Stack Mode
 Backend is still available for other features:
@@ -75,11 +75,11 @@ The system automatically maps English book abbreviations to Indonesian names:
 
 ## Benefits
 
-1. **🚀 Faster Load Times** - No backend proxy hop
-2. **📱 Offline-Ready** - Frontend can be fully static
-3. **💰 Lower Costs** - No backend server needed for Indonesian Bible
-4. **🔧 Simpler Deployment** - Can deploy frontend separately
-5. **⚡ Better Performance** - Direct API calls reduce latency
+1. ** Faster Load Times** - No backend proxy hop
+2. ** Offline-Ready** - Frontend can be fully static
+3. ** Lower Costs** - No backend server needed for Indonesian Bible
+4. ** Simpler Deployment** - Can deploy frontend separately
+5. ** Better Performance** - Direct API calls reduce latency
 
 ## API Response Format
 
@@ -126,12 +126,12 @@ Potential enhancements:
 ## Questions?
 
 Check the browser console for detailed logging:
-- 🔍 Request details
-- ✅ Success confirmations
-- ⚠️ Warnings and fallbacks
-- ❌ Error messages
+- Request details
+- Success confirmations
+- Warnings and fallbacks
+- Error messages
 
 ---
 
 **Last Updated**: November 20, 2025
-**Status**: ✅ Production Ready
+**Status**:  Production Ready

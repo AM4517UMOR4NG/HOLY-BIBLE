@@ -35,7 +35,7 @@ This will tell you if virtualization is enabled on your system.
 
 #### Step 2: Enable WSL2 Features
 
-Right-click on **enable-wsl2.ps1** and select **"Run with PowerShell (Admin)"**
+Right-click on **enable-wsl2.ps1** and select**"Run with PowerShell (Admin)"**
 
 Or run this in PowerShell as Administrator:
 ```powershell
@@ -135,8 +135,8 @@ docker compose logs -f
 ## Summary
 
 The issue is that Docker Desktop requires WSL2 on Windows to run Linux containers, and WSL2 requires:
-1. ✓ Virtualization enabled in BIOS
-2. ✓ Windows features enabled (WSL + Virtual Machine Platform)
-3. ✓ A Linux distribution installed (Ubuntu)
+1. Virtualization enabled in BIOS
+2. Windows features enabled (WSL + Virtual Machine Platform)
+3. A Linux distribution installed (Ubuntu)
 
 Follow the steps above in order, and you'll have Docker working properly!

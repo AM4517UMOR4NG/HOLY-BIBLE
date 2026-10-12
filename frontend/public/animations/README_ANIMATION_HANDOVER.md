@@ -1,6 +1,6 @@
 # Jesus Teaching Animation - Delivery Instructions
 
-## 📦 Deliverables Checklist
+## Deliverables Checklist
 
 Please deliver the following files to this directory (`/public/animations/`):
 
@@ -73,7 +73,7 @@ Create subfolder: `/public/animations/sound_optional/`
 
 ---
 
-## 🎬 Storyboard Reference (12-16s Loop)
+## Storyboard Reference (12-16s Loop)
 
 ### Shot A - Establish (0.0 - 2.5s)
 - Wide lakeside at golden hour
@@ -103,7 +103,7 @@ Create subfolder: `/public/animations/sound_optional/`
 
 ---
 
-## 🎨 Visual Specifications
+## Visual Specifications
 
 ### Color Palette
 - **Primary:** Warm gold/orange (#F59E0B to #F97316) - sunset glow
@@ -124,7 +124,7 @@ Create subfolder: `/public/animations/sound_optional/`
 
 ---
 
-## 🔧 Technical Integration Notes
+## Technical Integration Notes
 
 ### How the component will use your files:
 
@@ -152,37 +152,37 @@ lottie.loadAnimation({
 ```
 
 ### Behaviors Already Implemented:
-✅ Lazy-load with IntersectionObserver  
-✅ Auto-pause when user focuses on input fields  
-✅ Reduced motion support (shows poster only)  
-✅ aria-hidden="true" for accessibility  
-✅ Responsive srcset for mobile/desktop  
-✅ Gradient overlay for text safe-zone  
+ Lazy-load with IntersectionObserver  
+ Auto-pause when user focuses on input fields  
+ Reduced motion support (shows poster only)  
+ aria-hidden="true" for accessibility  
+ Responsive srcset for mobile/desktop  
+ Gradient overlay for text safe-zone  
 
 ---
 
-## ✅ Acceptance Criteria & Testing
+## Acceptance Criteria & Testing
 
 ### Must Pass All:
 
 1. **Loop Seamless:** No visible jump/flash at loop point
 2. **File Sizes:** 
-   - Mobile WebM ≤ 2.5MB ✓
-   - Desktop WebM ≤ 5MB ✓
-   - Lottie files ≤ 300KB each ✓
+   - Mobile WebM ≤ 2.5MB
+   - Desktop WebM ≤ 5MB
+   - Lottie files ≤ 300KB each
 3. **Browser Compatibility:** 
-   - Chrome (latest) ✓
-   - Firefox (latest) ✓
-   - Safari iOS (latest) ✓
-   - Edge (latest) ✓
+   - Chrome (latest)
+   - Firefox (latest)
+   - Safari iOS (latest)
+   - Edge (latest)
 4. **Performance:**
    - Video loads and plays within 3s on 3G connection
    - No layout shift on page load (poster prevents CLS)
    - Smooth 24-30 fps playback on mid-range devices
 5. **Accessibility:**
-   - Reduced motion shows static poster ✓
-   - No audio auto-plays ✓
-   - Does not interfere with form focus/readability ✓
+   - Reduced motion shows static poster
+   - No audio auto-plays
+   - Does not interfere with form focus/readability
 
 ### Testing Proof Required:
 Please provide:
@@ -193,7 +193,7 @@ Please provide:
 
 ---
 
-## 📋 Encoding Commands (Reference)
+## Encoding Commands (Reference)
 
 ### WebM (VP9):
 ```bash
@@ -221,7 +221,7 @@ ffmpeg -i bg_loop_1280.webm -ss 00:00:01 -vframes 1 -vf scale=720:-1 poster.webp
 
 ---
 
-## 📞 Contact & Revisions
+## Contact & Revisions
 
 ### Revision Process:
 - **Round 1 (Draft):** Submit low-res MP4 preview + animatic within 1 week
@@ -237,7 +237,7 @@ Contact project lead via [insert contact method]
 
 ---
 
-## 🎯 Quick Brief Summary (for proposals)
+## Quick Brief Summary (for proposals)
 
 **Task:** 12-16s loop animation "Jesus Teaching Disciples" for login/register page background  
 **Style:** 2D semi-realistic, warm golden hour lakeside, gentle peaceful tone  
@@ -248,4 +248,4 @@ Contact project lead via [insert contact method]
 
 ---
 
-**Thank you for your work! This animation will bring a peaceful, contemplative atmosphere to our Bible app's authentication experience. 🙏**
+**Thank you for your work! This animation will bring a peaceful, contemplative atmosphere to our Bible app's authentication experience.**

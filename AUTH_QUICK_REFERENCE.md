@@ -1,20 +1,20 @@
-# 🚀 Authentication Quick Reference
+# Authentication Quick Reference
 
 Quick API reference untuk authentication endpoints di HOLY BIBLE.
 
-## 📋 Endpoints Overview
+## Endpoints Overview
 
 | Method | Endpoint | Auth Required | Description |
 |--------|----------|---------------|-------------|
-| POST | `/v1/auth/register` | ❌ | Register user baru |
-| POST | `/v1/auth/login` | ❌ | Login user |
-| POST | `/v1/auth/refresh` | ❌ | Refresh access token |
-| POST | `/v1/auth/logout` | ✅ | Logout user |
-| GET | `/v1/auth/me` | ✅ | Get current user |
+| POST | `/v1/auth/register` | No | Register user baru |
+| POST | `/v1/auth/login` | No | Login user |
+| POST | `/v1/auth/refresh` | No | Refresh access token |
+| POST | `/v1/auth/logout` | Yes | Logout user |
+| GET | `/v1/auth/me` | Yes | Get current user |
 
 ---
 
-## 🔐 Register
+## Register
 
 **Endpoint:** `POST /v1/auth/register`
 
@@ -28,11 +28,11 @@ Quick API reference untuk authentication endpoints di HOLY BIBLE.
 ```
 
 **Password Requirements:**
-- ✅ Minimal 8 karakter
-- ✅ Maksimal 100 karakter
-- ✅ Harus mengandung minimal 1 huruf kapital
-- ✅ Harus mengandung minimal 1 huruf kecil
-- ✅ Harus mengandung minimal 1 angka
+- Minimal 8 karakter
+- Maksimal 100 karakter
+- Harus mengandung minimal 1 huruf kapital
+- Harus mengandung minimal 1 huruf kecil
+- Harus mengandung minimal 1 angka
 
 **Response (201):**
 ```json
@@ -76,7 +76,7 @@ curl -X POST http://localhost:4000/v1/auth/register \
 
 ---
 
-## 🔑 Login
+## Login
 
 **Endpoint:** `POST /v1/auth/login`
 
@@ -131,7 +131,7 @@ curl -X POST http://localhost:4000/v1/auth/login \
 
 ---
 
-## 🔄 Refresh Token
+## Refresh Token
 
 **Endpoint:** `POST /v1/auth/refresh`
 
@@ -176,7 +176,7 @@ curl -X POST http://localhost:4000/v1/auth/refresh \
 
 ---
 
-## 👤 Get Current User
+## Get Current User
 
 **Endpoint:** `GET /v1/auth/me`
 
@@ -216,7 +216,7 @@ curl -X GET http://localhost:4000/v1/auth/me \
 
 ---
 
-## 🚪 Logout
+## Logout
 
 **Endpoint:** `POST /v1/auth/logout`
 
@@ -252,7 +252,7 @@ curl -X POST http://localhost:4000/v1/auth/logout \
 
 ---
 
-## 🔒 Token Details
+## Token Details
 
 ### Access Token
 - **Type:** JWT
@@ -268,7 +268,7 @@ curl -X POST http://localhost:4000/v1/auth/logout \
 
 ---
 
-## 📝 Error Codes
+## Error Codes
 
 | Status Code | Description |
 |-------------|-------------|
@@ -281,36 +281,36 @@ curl -X POST http://localhost:4000/v1/auth/logout \
 
 ---
 
-## 💡 Best Practices
+## Best Practices
 
 1. **Store Tokens Securely**
-   - ✅ Store in httpOnly cookies (recommended)
-   - ✅ Or in secure storage (localStorage/sessionStorage)
-   - ❌ Never expose tokens in URLs
+   - Store in httpOnly cookies (recommended)
+   - Or in secure storage (localStorage/sessionStorage)
+   - Never expose tokens in URLs
 
 2. **Token Refresh**
-   - ✅ Refresh access token before expiration
-   - ✅ Handle token refresh errors gracefully
-   - ✅ Redirect to login if refresh fails
+   - Refresh access token before expiration
+   - Handle token refresh errors gracefully
+   - Redirect to login if refresh fails
 
 3. **Error Handling**
-   - ✅ Check `success` field in response
-   - ✅ Handle validation errors from `errors` array
-   - ✅ Show user-friendly error messages
+   - Check `success` field in response
+   - Handle validation errors from `errors` array
+   - Show user-friendly error messages
 
 4. **Security**
-   - ✅ Always use HTTPS in production
-   - ✅ Never log tokens
-   - ✅ Implement token rotation if needed
+   - Always use HTTPS in production
+   - Never log tokens
+   - Implement token rotation if needed
 
 ---
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - [API Testing Guide](./AUTH_API_TESTING.md) - Comprehensive testing
 - [Implementation Summary](./AUTH_IMPLEMENTATION_SUMMARY.md) - Implementation details
 
 ---
 
-**Happy Coding! 🚀**
+**Happy Coding!**
 

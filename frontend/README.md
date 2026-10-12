@@ -4,12 +4,12 @@ Modern, beautiful, and user-friendly web interface for reading and studying the 
 
 ## Features
 
-- 📖 **Bible Reading** - Clean and distraction-free reading experience
-- 🔍 **Search** - Powerful search functionality to find verses quickly
-- 🔖 **Bookmarks** - Save your favorite verses for later
-- 📝 **Annotations** - Add personal notes to verses
-- 🌓 **Dark Mode** - Easy on the eyes for night reading
-- 📱 **Responsive** - Works perfectly on all devices
+- **Bible Reading** - Clean and distraction-free reading experience
+- **Search** - Powerful search functionality to find verses quickly
+- **Bookmarks** - Save your favorite verses for later
+- **Annotations** - Add personal notes to verses
+- **Dark Mode** - Easy on the eyes for night reading
+- **Responsive** - Works perfectly on all devices
 
 ## Tech Stack
 

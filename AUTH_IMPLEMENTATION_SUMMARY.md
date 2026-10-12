@@ -1,21 +1,21 @@
-# ✨ Authentication Implementation Summary
+# Authentication Implementation Summary
 
 Fitur dan detail implementasi sistem authentication di HOLY BIBLE.
 
-## 🎯 Overview
+## Overview
 
-Sistem authentication menggunakan **JWT (JSON Web Tokens)** dengan **refresh token pattern** untuk keamanan yang lebih baik. Implementasi mencakup:
+Sistem authentication menggunakan **JWT (JSON Web Tokens)** dengan**refresh token pattern** untuk keamanan yang lebih baik. Implementasi mencakup:
 
-- ✅ User registration dengan validasi
-- ✅ Secure password hashing (bcrypt)
-- ✅ JWT-based authentication
-- ✅ Refresh token mechanism
-- ✅ Session management
-- ✅ Role-based access control
+- User registration dengan validasi
+- Secure password hashing (bcrypt)
+- JWT-based authentication
+- Refresh token mechanism
+- Session management
+- Role-based access control
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Components
 
@@ -54,18 +54,18 @@ src/
 
 ---
 
-## 🔐 Features
+## Features
 
 ### 1. User Registration
 
 **Endpoint:** `POST /v1/auth/register`
 
 **Features:**
-- ✅ Email validation (format & uniqueness)
-- ✅ Password strength validation
-- ✅ Name validation
-- ✅ Automatic password hashing (bcrypt)
-- ✅ Default role assignment (USER)
+- Email validation (format & uniqueness)
+- Password strength validation
+- Name validation
+- Automatic password hashing (bcrypt)
+- Default role assignment (USER)
 
 **Password Requirements:**
 - Minimum 8 characters
@@ -97,12 +97,12 @@ const user = await prisma.user.create({
 **Endpoint:** `POST /v1/auth/login`
 
 **Features:**
-- ✅ Email & password validation
-- ✅ Secure password verification (bcrypt)
-- ✅ JWT token generation
-- ✅ Refresh token generation
-- ✅ Session creation in database
-- ✅ Token expiration management
+- Email & password validation
+- Secure password verification (bcrypt)
+- JWT token generation
+- Refresh token generation
+- Session creation in database
+- Token expiration management
 
 **Token Types:**
 - **Access Token:** Short-lived (1 hour), for API requests
@@ -139,10 +139,10 @@ const refreshToken = signRefreshToken({
 **Endpoint:** `POST /v1/auth/refresh`
 
 **Features:**
-- ✅ Refresh token validation
-- ✅ Session verification
-- ✅ New access token generation
-- ✅ Automatic session expiration check
+- Refresh token validation
+- Session verification
+- New access token generation
+- Automatic session expiration check
 
 **Flow:**
 1. Client sends refresh token
@@ -182,9 +182,9 @@ const accessToken = signAccessToken({
 **Endpoint:** `GET /v1/auth/me`
 
 **Features:**
-- ✅ JWT token validation
-- ✅ User data retrieval
-- ✅ Protected route (requires authentication)
+- JWT token validation
+- User data retrieval
+- Protected route (requires authentication)
 
 **Implementation:**
 ```typescript
@@ -204,9 +204,9 @@ app.get('/auth/me', { preHandler: [app.authenticate] }, async (req, reply) => {
 **Endpoint:** `POST /v1/auth/logout`
 
 **Features:**
-- ✅ Session deletion
-- ✅ Token invalidation
-- ✅ Optional refresh token cleanup
+- Session deletion
+- Token invalidation
+- Optional refresh token cleanup
 
 **Implementation:**
 ```typescript
@@ -222,7 +222,7 @@ if (body.refreshToken) {
 
 ---
 
-## 🔒 Security Features
+## Security Features
 
 ### 1. Password Hashing
 
@@ -281,7 +281,7 @@ const isValid = await bcrypt.compare(password, hashedPassword);
 
 ---
 
-## 📊 Database Schema
+## Database Schema
 
 ### User Model
 ```prisma
@@ -311,7 +311,7 @@ model Session {
 
 ---
 
-## 🛠️ Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -329,7 +329,7 @@ REFRESH_TOKEN_EXPIRES=30d         # 30 days
 
 ---
 
-## 🔄 Authentication Flow
+## Authentication Flow
 
 ```
 1. User Registration
@@ -361,7 +361,7 @@ REFRESH_TOKEN_EXPIRES=30d         # 30 days
 
 ---
 
-## 🎯 Role-Based Access Control
+## Role-Based Access Control
 
 **Roles:**
 - `USER` - Default role, basic access
@@ -378,7 +378,7 @@ if (req.user!.role !== 'ADMIN') {
 
 ---
 
-## 📝 Error Handling
+## Error Handling
 
 ### Error Response Format
 ```json
@@ -404,7 +404,7 @@ if (req.user!.role !== 'ADMIN') {
 
 ---
 
-## 🚀 Future Enhancements
+## Future Enhancements
 
 - [ ] Email verification
 - [ ] Password reset
@@ -417,14 +417,14 @@ if (req.user!.role !== 'ADMIN') {
 
 ---
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - [Quick Reference](./AUTH_QUICK_REFERENCE.md) - Quick API reference
 - [API Testing Guide](./AUTH_API_TESTING.md) - Testing documentation
 
 ---
 
-## 📚 Technologies Used
+## Technologies Used
 
 - **JWT:** jsonwebtoken
 - **Password Hashing:** bcryptjs
@@ -434,5 +434,5 @@ if (req.user!.role !== 'ADMIN') {
 
 ---
 
-**Happy Coding! 🚀**
+**Happy Coding!**
 
