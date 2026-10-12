@@ -311,6 +311,3 @@ curl -X POST http://localhost:4000/v1/auth/logout \
 - [Implementation Summary](./AUTH_IMPLEMENTATION_SUMMARY.md) - Implementation details
 
 ---
-
-**Happy Coding!**
-
