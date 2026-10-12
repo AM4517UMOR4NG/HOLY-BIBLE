@@ -75,7 +75,3 @@ src/
 ## API Integration
 
 The frontend connects to the backend API running on `http://localhost:4000`. Make sure the backend is running before starting the frontend.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
