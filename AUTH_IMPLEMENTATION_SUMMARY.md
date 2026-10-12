@@ -433,6 +433,3 @@ if (req.user!.role !== 'ADMIN') {
 - **Framework:** Fastify
 
 ---
-
-**Happy Coding!**
-
