@@ -1,8 +1,8 @@
-# 🛠️ Command Reference - HOLY BIBLE
+# Command Reference - HOLY BIBLE
 
 Daftar lengkap command yang sering digunakan dalam development HOLY BIBLE.
 
-## 📦 Package Management
+## Package Management
 
 ### Install Dependencies
 ```bash
@@ -24,7 +24,7 @@ cd frontend && npm update
 
 ---
 
-## 🚀 Development
+## Development
 
 ### Start Development Server
 
@@ -59,7 +59,7 @@ npm run preview
 
 ---
 
-## 🗄️ Database Commands
+## Database Commands
 
 ### Prisma Commands
 
@@ -80,7 +80,7 @@ npx prisma migrate dev --name <migration_name>
 **Reset Database:**
 ```bash
 npx prisma migrate reset
-# ⚠️ HATI-HATI: Akan menghapus semua data!
+# HATI-HATI: Akan menghapus semua data!
 ```
 
 **View Database:**
@@ -113,7 +113,7 @@ ts-node scripts/seed/seed.ts <path_to_json_file>
 
 ---
 
-## 🐳 Docker Commands
+## Docker Commands
 
 ### Start Services
 ```bash
@@ -166,12 +166,12 @@ docker compose restart postgres
 # Stop dan remove containers
 docker compose down -v
 
-# ⚠️ HATI-HATI: Akan menghapus semua data di volumes!
+# HATI-HATI: Akan menghapus semua data di volumes!
 ```
 
 ---
 
-## 🧪 Testing Commands
+## Testing Commands
 
 ### Linting
 ```bash
@@ -202,7 +202,7 @@ node test-auth.js
 
 ---
 
-## 🔍 Debugging Commands
+## Debugging Commands
 
 ### Check Port Usage
 ```bash
@@ -233,7 +233,7 @@ cat .env
 
 ---
 
-## 📡 API Testing Commands
+## API Testing Commands
 
 ### Health Check
 ```bash
@@ -272,7 +272,7 @@ curl -H "Authorization: Bearer <TOKEN>" \
 
 ---
 
-## 🧹 Cleanup Commands
+## Cleanup Commands
 
 ### Clean Node Modules
 ```bash
@@ -313,7 +313,7 @@ docker system prune -a
 
 ---
 
-## 📝 Git Commands
+## Git Commands
 
 ### Basic Git
 ```bash
@@ -347,7 +347,7 @@ git merge feature/your-feature
 
 ---
 
-## 🔐 Security Commands
+## Security Commands
 
 ### Generate JWT Secret
 ```bash
@@ -369,7 +369,7 @@ npm audit fix
 
 ---
 
-## 📊 Monitoring Commands
+## Monitoring Commands
 
 ### Check Process
 ```bash
@@ -396,7 +396,7 @@ docker stats
 
 ---
 
-## 🚢 Deployment Commands
+## Deployment Commands
 
 ### Build for Production
 ```bash
@@ -418,7 +418,7 @@ cd frontend && npm run preview
 
 ---
 
-## 💡 Quick Tips
+## Quick Tips
 
 ### Run Multiple Commands
 ```bash
@@ -449,13 +449,10 @@ NODE_ENV=production npm start
 
 ---
 
-## 📚 Related Documentation
+## Related Documentation
 
 - [Quick Start Guide](./QUICK_START.md)
 - [Panduan Lengkap](./PANDUAN_MENJALANKAN.md)
 - [Setup Checklist](./SETUP_CHECKLIST.md)
 
 ---
-
-**Happy Coding! 🚀**
-
