@@ -1,24 +1,24 @@
-# 📖 Panduan Lengkap - HOLY BIBLE
+# Panduan Lengkap - HOLY BIBLE
 
 Panduan komprehensif untuk setup, konfigurasi, dan troubleshooting aplikasi HOLY BIBLE.
 
-## 📋 Daftar Isi
+## Daftar Isi
 
-1. [Prasyarat](#-prasyarat)
-2. [Installation](#-installation)
-3. [Konfigurasi](#-konfigurasi)
-4. [Menjalankan Aplikasi](#-menjalankan-aplikasi)
-5. [Troubleshooting](#-troubleshooting)
-6. [Best Practices](#-best-practices)
+1. [Prasyarat](#prasyarat)
+2. [Installation](#installation)
+3. [Konfigurasi](#konfigurasi)
+4. [Menjalankan Aplikasi](#menjalankan-aplikasi)
+5. [Troubleshooting](#troubleshooting)
+6. [Best Practices](#best-practices)
 
 ---
 
-## 🔧 Prasyarat
+## Prasyarat
 
 ### Software yang Diperlukan
 
 | Software | Version | Keterangan |
-|----------|---------|------------|
+|---|---|---|
 | Node.js | 20+ | Runtime JavaScript |
 | npm/yarn | Latest | Package manager |
 | Docker | 20+ | Container platform |
@@ -38,12 +38,12 @@ git --version
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/HOLY_BIBLE.git
+git clone [https://github.com/yourusername/HOLY_BIBLE.git](https://github.com/yourusername/HOLY_BIBLE.git)
 cd HOLY_BIBLE
 ```
 
@@ -86,7 +86,7 @@ VITE_API_URL=http://localhost:4000
 
 ---
 
-## ⚙️ Konfigurasi
+## Konfigurasi
 
 ### Database Setup
 
@@ -127,7 +127,7 @@ docker compose up -d minio
 
 ---
 
-## 🚀 Menjalankan Aplikasi
+## Menjalankan Aplikasi
 
 ### Development Mode
 
@@ -181,7 +181,7 @@ chmod +x start-all.sh
 
 ---
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Masalah Umum
 
@@ -333,39 +333,39 @@ npm run dev -- --debug
 
 ---
 
-## 💡 Best Practices
+## Best Practices
 
 ### 1. Environment Variables
-- ✅ Jangan commit `.env` ke git
-- ✅ Gunakan `.env.example` sebagai template
-- ✅ Gunakan secret management untuk production
+- Jangan commit `.env` ke git
+- Gunakan `.env.example` sebagai template
+- Gunakan secret management untuk production
 
 ### 2. Database
-- ✅ Backup database secara berkala
-- ✅ Gunakan migrations untuk schema changes
-- ✅ Jangan edit migration yang sudah di-deploy
+- Backup database secara berkala
+- Gunakan migrations untuk schema changes
+- Jangan edit migration yang sudah di-deploy
 
 ### 3. Security
-- ✅ Ganti `JWT_PRIVATE_KEY` dengan random string untuk production
-- ✅ Gunakan HTTPS untuk production
-- ✅ Set CORS dengan benar
-- ✅ Validasi semua input
+- Ganti `JWT_PRIVATE_KEY` dengan random string untuk production
+- Gunakan HTTPS untuk production
+- Set CORS dengan benar
+- Validasi semua input
 
 ### 4. Development
-- ✅ Gunakan TypeScript strict mode
-- ✅ Run linter sebelum commit
-- ✅ Write tests untuk fitur baru
-- ✅ Update dokumentasi saat menambah fitur
+- Gunakan TypeScript strict mode
+- Run linter sebelum commit
+- Write tests untuk fitur baru
+- Update dokumentasi saat menambah fitur
 
 ### 5. Performance
-- ✅ Gunakan database indexing
-- ✅ Optimize queries
-- ✅ Cache hasil query yang sering digunakan
-- ✅ Monitor resource usage
+- Gunakan database indexing
+- Optimize queries
+- Cache hasil query yang sering digunakan
+- Monitor resource usage
 
 ---
 
-## 📚 Resources
+## Resources
 
 - [Prisma Documentation](https://www.prisma.io/docs)
 - [Fastify Documentation](https://www.fastify.io/docs/latest/)
@@ -374,14 +374,11 @@ npm run dev -- --debug
 
 ---
 
-## 🆘 Butuh Bantuan?
+## Butuh Bantuan?
 
-- 📖 Baca [Quick Start Guide](./QUICK_START.md) untuk setup cepat
-- ✅ Cek [Setup Checklist](./SETUP_CHECKLIST.md)
-- 🐛 Buka issue di GitHub
-- 💬 Diskusi di GitHub Discussions
+- Baca [Quick Start Guide](./QUICK_START.md) untuk setup cepat
+- Cek [Setup Checklist](./SETUP_CHECKLIST.md)
+- Buka issue di GitHub
+- Diskusi di GitHub Discussions
 
 ---
-
-**Selamat coding! 🎉**
-
